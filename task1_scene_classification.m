@@ -7,8 +7,8 @@ function task1_scene_classification(varargin)
     
     parser = inputParser;
     parser.addOptional('mode', 'development', @isstr);
-    parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
-    %parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
+    %parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+    parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
     parse(parser, varargin{:});
 
     params = load_parameters(parser.Results.yaml_path);
@@ -35,10 +35,12 @@ function task1_scene_classification(varargin)
     end
 
     % Get dataset container class
-    if strcmp(params.general.development_dataset, 'TUTAcousticScenes_2016_DevelopmentSet')
+    if strcmp(params.general.development_dataset, ...
+            'TUTAcousticScenes_2016_DevelopmentSet')
         dataset = TUTAcousticScenes_2016_DevelopmentSet(params.path.data);
     else
-        error(['Unknown development dataset [', params.general.development_dataset, ']']);
+        error(['Unknown development dataset [', ...
+            params.general.development_dataset, ']']);
     end
     
     % Fetch data over internet and setup the data
