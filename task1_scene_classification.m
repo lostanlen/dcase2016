@@ -1,31 +1,20 @@
 function task1_scene_classification(varargin)
-    % DCASE 2016
-    %  Task 1: Acoustic Scene Classification
-    %  Baseline system
-    %  ---------------------------------------------
-    %  Tampere University of Technology / Audio Research Group
-    %  Author:  Toni Heittola ( toni.heittola@tut.fi )
-    %
-    %  System description
-    %     This is an baseline implementation for D-CASE 2016 challenge acoustic scene classification task.
-    %     Features: MFCC (static+delta+acceleration)
-    %     Classifier: GMM
-    %
-    %
-    
-    download_external_libraries % Download external libraries
-    add_paths;   % Add file paths
+
+    download_external_libraries(); % Download external libraries
+    add_paths();   % Add file paths
     
     rng(123456); % let's make randomization predictable
     
     parser = inputParser;
     parser.addOptional('mode', 'development', @isstr);
+    parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+    %parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
     parse(parser, varargin{:});
 
-    params = load_parameters('task1_scene_classification.yaml');
+    params = load_parameters(parser.Results.yaml_path);
     params = process_parameters(params);
 
-    title('DCASE 2016::Acoustic Scene Classification / Baseline System');
+    title('DCASE 2016::Acoustic Scene Classification');
 
     % Check if mode is defined
     if(strcmp(parser.Results.mode, 'development')),
