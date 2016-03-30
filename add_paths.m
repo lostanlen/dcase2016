@@ -15,3 +15,4 @@ addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'GetFullPat
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'YAMLMatlab',filesep,'yamlmatlab-master',filesep,'yaml']);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'rastamat']);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'voicebox']);
+addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'scattering.m']);

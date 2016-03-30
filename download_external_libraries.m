@@ -67,8 +67,23 @@ if(~exist([external_libraries_path,filesep,'DataHash'],'dir')),
 	
 	if exist(datahash_path, 'file') == 0,		
 		urlwrite(url,[external_libraries_path,filesep,'DataHash.zip']);
-		files = unzip([external_libraries_path,filesep,'DataHash.zip'],datahash_path);
+		files = unzip([external_libraries_path,filesep,'DataHash.zip'], ...
+            datahash_path);
 		delete([external_libraries_path,filesep,'DataHash.zip']);
+	end
+	foot();
+end
+
+if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
+    section_header('Install::scattering.m');
+    scattering_path = [external_libraries_path,'scattering.m'];
+	url = 'https://github.com/lostanlen/scattering.m/archive/master.zip';
+    
+	if exist(scattering_path, 'file') == 0		
+		urlwrite(url,[external_libraries_path,filesep,'scattering.m.zip']);
+		files = unzip([external_libraries_path,filesep,'scattering.m.zip'], ...
+            scattering_path);
+		delete([external_libraries_path,filesep,'scattering.m.zip']);
 	end
 	foot();
 end
