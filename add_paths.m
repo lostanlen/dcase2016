@@ -9,6 +9,8 @@ addpath([fileparts(mfilename('fullpath')),filesep,'src',filesep,'features',files
 addpath([fileparts(mfilename('fullpath')),filesep,'src',filesep,'evaluation',filesep]);
 addpath([fileparts(mfilename('fullpath')),filesep,'src',filesep,'sound_event_detection',filesep]);
 
+addpath([fileparts(mfilename('fullpath')),filesep,'src',filesep,'classification',filesep]);
+
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep]);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'DataHash']);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'GetFullPath']);
