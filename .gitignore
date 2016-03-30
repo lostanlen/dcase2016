@@ -10,5 +10,6 @@
 # Simulink Code Generation
 slprj/
 
+external/
 data/
 system/
