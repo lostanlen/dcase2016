@@ -33,8 +33,7 @@ function do_feature_extraction(files, dataset, feature_path, params, overwrite)
 check_path(feature_path);
 
 progress(1,'Extracting',(0 / length(files)), '');
-parfor file_id = 1:length(files)
-    file_id
+for file_id = 1:length(files)
     audio_filename = files{file_id};
     [raw_path, raw_filename, ext] = fileparts(audio_filename);
     current_feature_file = get_feature_filename(audio_filename, feature_path);
