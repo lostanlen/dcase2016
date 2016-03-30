@@ -41,13 +41,15 @@ function do_feature_normalization(dataset, feature_normalizer_path, feature_path
             normalizer = FeatureNormalizer();
             train_items = dataset.train(fold);
             
-            for item_id=1:length(train_items)
+            parfor item_id=1:length(train_items)
                 item = train_items(item_id);
-                progress(0, 'Collecting data', (item_id / length(train_items)), item.file, fold);
+                progress(0, 'Collecting data', ...
+                    (item_id / length(train_items)), item.file, fold);
                 
                 % Load features
                 if exist(get_feature_filename(item.file, feature_path), 'file')
-                    feature_data = load_data(get_feature_filename(item.file, feature_path));
+                    feature_data = ...
+                        load_data(get_feature_filename(item.file, feature_path));
                     feature_data = feature_data.stat;
                 else
                     error(['Features not found [', item.file, ']']);

@@ -56,19 +56,19 @@ function task1_scene_classification(varargin)
 
         % Collect files in train sets
         files = [];        
-        for fold=dataset.folds(dataset_evaluation_mode)
+        for fold = dataset.folds(dataset_evaluation_mode)
             train_items = dataset.train(fold);
             for item_id=1:length(train_items)
                 item = train_items(item_id);
                 if sum(strcmp(item.file,files)) == 0
-                    files = [files, {item.file}];
+                    files = cat(1, files, {item.file});
                 end
             end 
             test_items = dataset.test(fold);
             for item_id=1:length(test_items)
                 item = test_items(item_id);
                 if sum(strcmp(item.file,files)) == 0
-                    files = [files, {item.file}];
+                    files = cat(1, files, {item.file});
                 end
             end                        
         end        
