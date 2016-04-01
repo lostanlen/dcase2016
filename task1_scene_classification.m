@@ -6,8 +6,8 @@ rng(123456); % let's make randomization predictable
 
 parser = inputParser;
 parser.addOptional('mode', 'development', @isstr);
-%parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
-parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
+parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+%parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
 parse(parser, varargin{:});
 
 params = load_parameters(parser.Results.yaml_path);
@@ -57,14 +57,14 @@ if params.flow.extract_features
     files = [];
     for fold = dataset.folds(dataset_evaluation_mode)
         train_items = dataset.train(fold);
-        for item_id=1:length(train_items)
+        for item_id = 1:length(train_items)
             item = train_items(item_id);
             if sum(strcmp(item.file,files)) == 0
                 files = cat(1, files, {item.file});
             end
         end
         test_items = dataset.test(fold);
-        for item_id=1:length(test_items)
+        for item_id = 1:length(test_items)
             item = test_items(item_id);
             if sum(strcmp(item.file,files)) == 0
                 files = cat(1, files, {item.file});
