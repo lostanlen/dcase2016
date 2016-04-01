@@ -21,6 +21,21 @@ if isfield(params.features, 'mfcc')
         round(params.features.win_length_seconds * params.features.fs);
     params.features.mfcc.hop_length = ...
         round(params.features.hop_length_seconds * params.features.fs);
+elseif isfield(params.features, 'scattering')
+    p = params.features.scattering;
+    opts{1}.time.T = pow2(round(log2(params.features.win_length_seconds * ...
+        params.features.fs)));
+    log2_oversampling = round(log2(params.features.win_length_seconds) - ...
+        log2(params.features.hop_length_seconds)) - 1;
+    opts{1}.time.max_Q = p.Q1;
+    opts{1}.time.gamma_bounds = [1 p.Q1*p.J1];
+    opts{1}.time.S_log2_oversampling = log2_oversampling;
+    opts{2}.time.max_Q = p.Q2_time;
+    opts{2}.time.gamma_bounds = [1 p.Q2_time*p.J2_time];
+    opts{2}.time.S_log2_oversampling = log2_oversampling;
+    opts{2}.gamma.max_Q = p.Q2_freq;
+    opts{2}.gamma.gamma_bounds = [1 p.Q2_freq*p.J2_freq];
+    params.features.scattering.archs = sc_setup(opts);
 end
 
 params.classifier.parameters = ...
