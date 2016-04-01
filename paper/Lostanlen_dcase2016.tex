@@ -267,16 +267,9 @@
 
 
 \begin{document}
-%
-% paper title
-% Titles are generally capitalized except for words such as a, an, and, as,
-% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
-% not capitalized unless they are the first or last word of the title.
-% Linebreaks \\ can be used within to get better formatting as desired.
-% Do not put math or special symbols in the title.
 \title{
 Binaural Scene Classification \\
-with Time-frequency Scattering \\
+with Time-Frequency Scattering \\
 and Deep Convolutional Networks}
 
 % author names and affiliations
@@ -297,6 +290,12 @@ The abstract goes here.
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
+% Assumption of stationarity
+% Long-range dependencies
+% A challenge in temporal integration
+
+% Contribution:
+% Online data augmentation to enforce invariance to binaural azimuth
 
 \section{Time-frequency scattering}
 
@@ -313,6 +312,9 @@ The abstract goes here.
 \times
 \vert \beta \vert \psi(\beta k_1)
 \end{equation}
+
+% Characterization of stationary processes
+% Re-synthesis from a time-invariant representation
 
 \section{Deep Convolutional Networks}
 

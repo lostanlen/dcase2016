@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  1 APR 2016 22:15
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  1 APR 2016 23:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -200,9 +200,6 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 269.
 LaTeX Font Info:    ... okay on input line 269.
 
 -- Lines per column: 56 (exact).
-
-LaTeX Warning: Citation `Anden2015' on page 1 undefined on input line 318.
-
 (./Lostanlen_dcase2016.bbl)
 
 ** Conference Paper **
@@ -219,16 +216,12 @@ Before submitting the final camera ready copy, remember to:
 
 
 
-] (./Lostanlen_dcase2016.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+] (./Lostanlen_dcase2016.aux) ) 
 Here is how much of TeX's memory you used:
- 1825 strings out of 493706
- 28252 string characters out of 6145769
+ 1824 strings out of 493706
+ 28241 string characters out of 6145769
  86638 words of memory out of 5000000
- 5210 multiletter control sequences out of 15000+600000
+ 5209 multiletter control sequences out of 15000+600000
  29449 words of font info for 69 fonts, out of 8000000 for 9000
  1329 hyphenation exceptions out of 8191
  27i,7n,20p,242b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
