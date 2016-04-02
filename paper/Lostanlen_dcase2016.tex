@@ -137,6 +137,7 @@
 % *** MATH PACKAGES ***
 %
 \usepackage{amsmath}
+\usepackage{stmaryrd}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -290,6 +291,11 @@ The abstract goes here.
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
+Classification of acoustic scenes is only made possible by integrating
+signal information over a long temporal context.
+Whereas a few seconds are often sufficient to recognize a speaker,
+a musical instrument, or a genre, it may require up to 30 seconds
+to disambiguate closely related acoustic scenes.
 % Assumption of stationarity
 % Long-range dependencies
 % A challenge in temporal integration
@@ -298,13 +304,41 @@ The abstract goes here.
 % Online data augmentation to enforce invariance to binaural azimuth
 
 \section{Time-frequency scattering}
+Let $\boldsymbol{\psi}[t]$ an analytic band-pass filter of
+dimensionless frequency $\xi$ and bandwidth $\xi/Q$.
+A filter bank of wavelets is built by dilating $\boldsymbol{\psi}$
+according to a geometric sequence of scales $2^{-k_1/Q}$, where the
+log-frequency index $k_1$ takes integer values in the interval
+$\llbracket 0 ; K_1 \llbracket$.
+We denote by $\boldsymbol{\psi_{k_1}}[t]$ the resulting wavelets.
+In all subsequent experiments,
+$\boldsymbol{\psi}$ is designed as a Gammatone
+wavelet of quality factor $Q = 4$, so as to approximate the properties of
+the human cochlea.
+The wavelet transform $\boldsymbol{}$ of an audio signal
+$\boldsymbol{x}[t]$ is obtained by convolution with all wavelets:
+$\boldsymbol{y_1}[t, k_1] =
+(\boldsymbol{x} \overset{t}{\ast} \boldsymbol{\psi_{k_1}})[t]$.
+Applying pointwise complex modulus to $\boldsymbol{y_1}$ yields
+the wavelet scalogram
+$\boldsymbol{x_1}[t, k_1]
+= \vert \boldsymbol{y_1}[t, k_1] \vert$, indexed by time $t$ and
+log-frequency $k_1$.
 
 \begin{equation}
 \boldsymbol{y_2}[t, k_1, k_2] =
 \left( \boldsymbol{x_1} \right. \! \overset{t,k_1}{\ast} \!
-\left. \boldsymbol{\psi_{k_2}} \right) [t, k_1]
+\left. \boldsymbol{\Psi_{k_2}} \right) [t, k_1]
 \end{equation}
-
+where the two-dimensional filter
+$\boldsymbol{\Psi_{k_2}}[t,k_1]$ is either
+a temporal low-pass filter $\boldsymbol{\phi}[t]$,
+a oriented edge detector in the time-frequency plane
+$(\boldsymbol{\psi_{\alpha}}[t] \times 
+\boldsymbol{\psi_{\beta}}[k_1])$,
+or 
+$(\boldsymbol{\psi_{\alpha}}[t] \times
+\boldsymbol{\phi}[k_1])$.
 
 \begin{equation}
 \mathbf{W_2}[t, k_1, k_2] =
