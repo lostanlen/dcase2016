@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  3 APR 2016 19:10
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  3 APR 2016 19:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -237,12 +237,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 2012 strings out of 493706
- 30748 string characters out of 6145769
- 92230 words of memory out of 5000000
- 5382 multiletter control sequences out of 15000+600000
+ 2014 strings out of 493706
+ 30769 string characters out of 6145769
+ 93230 words of memory out of 5000000
+ 5384 multiletter control sequences out of 15000+600000
  30061 words of font info for 72 fonts, out of 8000000 for 9000
  1329 hyphenation exceptions out of 8191
- 27i,10n,20p,242b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,15n,20p,242b,253s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on Lostanlen_dcase2016.pdf (1 page).
