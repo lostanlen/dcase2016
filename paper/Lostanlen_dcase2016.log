@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  3 APR 2016 00:24
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015) (preloaded format=xelatex 2016.1.18)  3 APR 2016 19:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -185,6 +185,9 @@ Package: stmaryrd 1994/03/03 St Mary's Road symbol package
 LaTeX Font Info:    Overwriting symbol font `stmry' in version `bold'
 (Font)                  U/stmry/m/n --> U/stmry/b/n on input line 89.
 )
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
 (/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
@@ -192,26 +195,26 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 (./Lostanlen_dcase2016.aux)
 \openout1 = `Lostanlen_dcase2016.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 270.
-LaTeX Font Info:    ... okay on input line 270.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 274.
+LaTeX Font Info:    ... okay on input line 274.
 
 -- Lines per column: 56 (exact).
-LaTeX Font Info:    Try loading font information for U+stmry on input line 307.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 311.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 
 LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
-(Font)              using `U/stmry/m/n' instead on input line 307.
+(Font)              using `U/stmry/m/n' instead on input line 311.
 
 (./Lostanlen_dcase2016.bbl)
 
@@ -228,19 +231,18 @@ Before submitting the final camera ready copy, remember to:
 [1
 
 
-
 ] (./Lostanlen_dcase2016.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 1981 strings out of 493706
- 30151 string characters out of 6145769
- 91861 words of memory out of 5000000
- 5355 multiletter control sequences out of 15000+600000
+ 2012 strings out of 493706
+ 30748 string characters out of 6145769
+ 92230 words of memory out of 5000000
+ 5382 multiletter control sequences out of 15000+600000
  30061 words of font info for 72 fonts, out of 8000000 for 9000
  1329 hyphenation exceptions out of 8191
- 27i,7n,20p,242b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,10n,20p,242b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on Lostanlen_dcase2016.pdf (1 page).

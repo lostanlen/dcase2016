@@ -138,6 +138,10 @@
 %
 \usepackage{amsmath}
 \usepackage{stmaryrd}
+\usepackage{xspace}
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\etal}{et al.\@\xspace}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -305,11 +309,10 @@ to disambiguate closely related acoustic scenes.
 
 \section{Time-frequency scattering}
 Let $\boldsymbol{\psi}[t]$ an analytic band-pass filter of
-dimensionless frequency $\xi$ and bandwidth $\xi/Q$.
+dimensionless frequency $1$ and bandwidth $1/Q$.
 A filter bank of wavelets is built by dilating $\boldsymbol{\psi}$
 according to a geometric sequence of scales $2^{-k_1/Q}$, where the
-log-frequency index $k_1$ takes integer values in the interval
-$\llbracket 0 ; K_1 \llbracket$.
+log-frequency index $k_1$ takes integer values.
 We denote by $\boldsymbol{\psi_{k_1}}[t]$ the resulting wavelets.
 In all subsequent experiments,
 $\boldsymbol{\psi}$ is designed as a Gammatone
@@ -322,31 +325,56 @@ $\boldsymbol{y_1}[t, k_1] =
 Applying pointwise complex modulus to $\boldsymbol{y_1}$ yields
 the wavelet scalogram
 $\boldsymbol{x_1}[t, k_1]
-= \vert \boldsymbol{y_1}[t, k_1] \vert$, indexed by time $t$ and
-log-frequency $k_1$.
+= \vert \boldsymbol{y_1}[t, k_1] \vert$,
+also called constant $Q$ transform (CQT),
+indexed by time $t$ and log-frequency $k_1$.
 
-\begin{equation}
-\boldsymbol{y_2}[t, k_1, k_2] =
+Time-frequency scattering consists in convolving
+$\boldsymbol{x_2}[t, k_1]$
+with a family of two-dimensional wavelets
+$\boldsymbol{\Psi_{k_2}}[t, k_1]$, where the index
+$k_2$ encapsulate two values, \ie
+a temporal scale $\alpha$ and a
+log-frequential scale $\beta$.
+The temporal scale $\alpha$ takes $5$ values between
+$23\,\mathrm{ms}$ and $370\,\mathrm{ms}$ according
+to a geometric sequence.
+The log-frequential scale $\beta$ takes $5$ values
+between $1/4^{\mathrm{th}}$ of an octave and
+$4$ octaves, as well as its $5$ "mirror" frequencies.
+In addition, the edge case $\beta = \infty$ corresponds
+to a log-frequential moving average along $4$ octaves
+according to all $5$ temporal scales $\alpha$.
+Finally, the edge case $(\alpha, \beta) = (\infty, 0)$
+coresponds to a temporal moving average
+$\boldsymbol{\phi}[t]$
+along $370\,\mathrm{ms}$ without any transformation of
+the log-frequency axis.
+In sum, there are
+$5 \times 5 \times 2 + 5 + 1 = 56$
+time-frequency scattering features for every time $t$
+and log-frequency $k_1$.
+
+The time-frequency scattering coefficients are thus
+defined as
+\begin{IEEEeqnarray}{rCl}
+\boldsymbol{y_2}[t, k_1, k_2]
+& = &
 \left( \boldsymbol{x_1} \right. \! \overset{t,k_1}{\ast} \!
 \left. \boldsymbol{\Psi_{k_2}} \right) [t, k_1]
-\end{equation}
-where the two-dimensional filter
-$\boldsymbol{\Psi_{k_2}}[t,k_1]$ is either
-a temporal low-pass filter $\boldsymbol{\phi}[t]$,
-a oriented edge detector in the time-frequency plane
-$(\boldsymbol{\psi_{\alpha}}[t] \times 
-\boldsymbol{\psi_{\beta}}[k_1])$,
-or 
-$(\boldsymbol{\psi_{\alpha}}[t] \times
-\boldsymbol{\phi}[k_1])$.
+\nonumber \\
+& = &
+\sum_{\tau, \kappa_1}
+\boldsymbol{x_1}[t - \tau, k_1 - \kappa_1]
+\boldsymbol{\Psi_{k_2}}[\tau, \kappa_1].
+\end{IEEEeqnarray}
 
 \begin{equation}
-\mathbf{W_2}[t, k_1, k_2] =
-\alpha \psi(\alpha t)
-\times
-\vert \beta \vert \psi(\beta k_1)
+\boldsymbol{x_2}[t,k_1,k_2] =
+\vert \boldsymbol{y_2}[t, k_1, k_2 ] \vert
+\overset{t}{\ast}
+\boldsymbol{\phi}[t]
 \end{equation}
-
 % Characterization of stationary processes
 % Re-synthesis from a time-invariant representation
 
