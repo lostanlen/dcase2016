@@ -343,7 +343,7 @@ The log-frequential scale $\beta$ takes $5$ values
 between $1/4^{\mathrm{th}}$ of an octave and
 $4$ octaves, as well as its $5$ "mirror" frequencies.
 In addition, the edge case $\beta = \infty$ corresponds
-to a log-frequential moving average along $4$ octaves
+to a log-frequential low-pass filter along $4$ octaves
 according to all $5$ temporal scales $\alpha$.
 Finally, the edge case $(\alpha, \beta) = (\infty, 0)$
 coresponds to a temporal moving average
@@ -374,13 +374,24 @@ applying pointwise complex modulus to
 $\boldsymbol{y_2}[t, k_1, k_2]$ provides
 translation-invariant coefficients as long as the amount
 of translation does not exceed $\alpha$.
-
+To increase the amount of invariance to translation,
+we apply the low-pass filter $\boldsymbol{\phi}[t]$
+to the moduli, hence bringing all coefficients to the same
+sample rate.
 \begin{equation}
 \boldsymbol{x_2}[t,k_1,k_2] =
 \vert \boldsymbol{y_2}[t, k_1, k_2 ] \vert
 \overset{t}{\ast}
 \boldsymbol{\phi}[t]
 \end{equation}
+
+% Fig. 1, (a), (b), (c), (d).
+% Show time-frequency scattering coefficients for various
+% values of (\alpha, \beta), including the two edge cases.
+
+% Fig. 2 (a), (b), (c), (d).
+% Tme-frequency scattering coefficeints.
+
 % Characterization of stationary processes
 % Re-synthesis from a time-invariant representation
 
