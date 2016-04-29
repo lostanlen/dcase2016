@@ -411,10 +411,10 @@ application of a pointwise nonlinearity, and local pooling.
 \IEEEeqnarraynumspace
 \end{IEEEeqnarray}
 We apply the rectified linear unit (ReLU) nonlinearity,
-with a rectifying slope of $\alpha=0.3$ for negative inputs.
+with a rectifying slope of $\nu=0.3$ for negative inputs.
 \begin{IEEEeqnarray}{l}
 \boldsymbol{y_{3}^{+}}[t,k_{1},k_{3}]=\left\{ \! \! \! \begin{array}{r}
-\alpha\boldsymbol{y_{3}}[t,k_{1},k_{3}] \;\;\; \mbox{if} \;\; \boldsymbol{y_{3}}[t,k_{1},k_{3}]<0\\
+\nu\,\boldsymbol{y_{3}}[t,k_{1},k_{3}] \;\;\; \mbox{if} \;\; \boldsymbol{y_{3}}[t,k_{1},k_{3}]<0\\
 \boldsymbol{y_{3}}[t,k_{1},k_{3}] \;\;\; \mbox{if} \;\; \boldsymbol{y_{3}}[t,k_{1},k_{3}]\geq0
 \end{array}\right. \!
 \IEEEeqnarraynumspace
