@@ -74,6 +74,7 @@ if(~exist([external_libraries_path,filesep,'DataHash'],'dir')),
 	foot();
 end
 
+% scattering.m by Vincent Lostanlen
 if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
     section_header('Install::scattering.m');
     scattering_path = [external_libraries_path,'scattering.m'];
