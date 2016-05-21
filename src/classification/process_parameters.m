@@ -34,7 +34,9 @@ elseif isfield(params.features, 'scattering')
     opts{2}.time.gamma_bounds = [1 p.Q2_time*p.J2_time];
     opts{2}.time.S_log2_oversampling = log2_oversampling;
     opts{2}.gamma.max_Q = p.Q2_freq;
+    opts{2}.gamma.T = 2^(p.J2_freq);
     opts{2}.gamma.gamma_bounds = [1 p.Q2_freq*p.J2_freq];
+    opts{2}.gamma.U_log2_oversampling = Inf;
     params.features.scattering.archs = sc_setup(opts);
 end
 
