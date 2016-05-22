@@ -63,12 +63,12 @@ else
     [nFrames, nLambda1s, ~] = size(S1);
     nLambda2s = length(S{1+2}.data);
     scattergram = cat(3, S1, zeros(nFrames, nLambda1s, nLambda2s, nAzimuths));
-    feat = S1(:, :, 1+(end/2));
+    feat = S1(:, :, :, floor(end/2));
     for lambda2_index = 1:nLambda2s
         band = S{1+2}.data{lambda2_index}((1+end/4):(3*end/4), :, :);
         band = reshape(band, ...
             size(band, 1) * nChunks, nAzimuths, size(band, 3));
-        feat = cat(2, feat, squeeze(band(:, 1+(end/2), :)));
+        feat = cat(2, feat, squeeze(band(:, floor(end/2), :)));
         band = permute(band, [1, 3, 4, 2]);
         scattergram(:, 1:size(band,2), end + 1 - lambda2_index, :) = band;
     end
@@ -77,7 +77,10 @@ end
 
 %%
 stat = FeatureNormalizer(feat);
-scattergram_stat = FeatureNormalizer(scattergram(:, :, :, 1+(end/2)));
+
+scattergram_stat = struct( ...
+    'mean', mean(mean(mean(scattergram), 2), 4), ...
+    'std', std(std(std(scattergram), 0, 2), 0, 4));
 
 features = struct( ...
     'feat', feat, ...
