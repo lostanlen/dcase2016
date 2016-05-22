@@ -4,27 +4,23 @@ original_length = 30 * 44100;
 truncated_length = 5 * 2^18;
 start = 1 + (original_length - truncated_length) / 2;
 stop = original_length - start + 1;
-y = y(start:stop);
+y = y(start:stop, :);
+nAzimuths = size(y, 2);
+if nAzimuths > 1
+    y = reshape(y, size(y, 1), 1, size(y, 2));
+end
 
 %% Chunking
 chunk_length = 2^19;
 hop_length = 2^18;
 chunk_range = 1:chunk_length;
 chunks = cat(2, ...
-    y(0*hop_length + chunk_range), ...
-    y(1*hop_length + chunk_range), ...
-    y(2*hop_length + chunk_range), ...
-    y(3*hop_length + chunk_range));
-
-
-%%
-chunk_length = archs{1}.banks{1}.spec.size;
-y_length = length(y);
-hop_length = chunk_length / 2;
-remainder = rem(y_length, hop_length);
-truncated_length = y_length - remainder;
-y = y(1:truncated_length);
-y_length = length(y);
+    y(0*hop_length + chunk_range, :, :), ...
+    y(1*hop_length + chunk_range, :, :), ...
+    y(2*hop_length + chunk_range, :, :), ...
+    y(3*hop_length + chunk_range, :, :));
+nChunks = 4;
+chunks = reshape(chunks, size(chunks, 1), nChunks * nAzimuths);
 
 %%
 nLayers = length(archs);
@@ -32,7 +28,7 @@ S = cell(1, nLayers);
 U = cell(1, nLayers);
 Y = cell(1, nLayers);
 
-U{1+0} = initialize_U(y, archs{1}.banks{1});
+U{1+0} = initialize_U(chunks, archs{1}.banks{1});
 
 %% Propagation cascade
 for layer = 1:nLayers
@@ -57,20 +53,23 @@ for layer = 1:nLayers
 end
 
 %%
-S1 = S{1+1}.data((1+end/4):(3*end/4), 2:(end-1), :);
-S1 = reshape(S1, size(S1, 1) * size(S1, 2), size(S1, 3));
-imagesc(S1.');
+S1 = S{1+1}.data((1+end/4):(3*end/4), :, :);
+S1 = reshape(S1, size(S1, 1) * nChunks, nAzimuths, size(S1, 3));
+S1 = permute(S1, [1, 3, 4, 2]);
 
 %%
-J2_time = length(S{1+2}{1,1}.data);
-S2_psi = cell(1, J2_time);
-for j2_time = 1:J2_time
-    tensor = cat(5, S{1+2}{1,1}.data{j2_time}{:});
-    tensor = tensor((1+end/4):(3*end/4), 2:(end-1), :, :, :, :);
-    tensor = reshape(tensor, ...
-        size(tensor, 1) * size(tensor, 2), ...
-        size(tensor, 3), size(tensor, 4), size(tensor, 5));
-    S2_psi{j2_time} = tensor;
+if iscell(S{1+2})
+else
+    [nFrames, nLambda1s, ~] = size(S1);
+    nLambda2s = length(S{1+2}.data);
+    features = cat(3, S1, zeros(nFrames, nLambda1s, nLambda2s, nAzimuths));
+    for lambda2_index = 1:nLambda2s
+        band = S{1+2}.data{lambda2_index}((1+end/4):(3*end/4), :, :);
+        band = reshape(band, ...
+            size(band, 1) * nChunks, nAzimuths, size(band, 3));
+        band = permute(band, [1, 3, 4, 2]);
+        features(:, 1:size(band,2), end + 1 - lambda2_index, :) = band;
+    end
 end
 end
 
