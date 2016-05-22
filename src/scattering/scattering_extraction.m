@@ -1,5 +1,23 @@
 function features = scattering_extraction(y, archs)
 %% Truncation
+original_length = 30 * 44100;
+truncated_length = 5 * 2^18;
+start = 1 + (original_length - truncated_length) / 2;
+stop = original_length - start + 1;
+y = y(start:stop);
+
+%% Chunking
+chunk_length = 2^19;
+hop_length = 2^18;
+chunk_range = 1:chunk_length;
+chunks = cat(2, ...
+    y(0*hop_length + chunk_range), ...
+    y(1*hop_length + chunk_range), ...
+    y(2*hop_length + chunk_range), ...
+    y(3*hop_length + chunk_range));
+
+
+%%
 chunk_length = archs{1}.banks{1}.spec.size;
 y_length = length(y);
 hop_length = chunk_length / 2;
