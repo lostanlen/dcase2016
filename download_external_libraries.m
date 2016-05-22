@@ -82,10 +82,10 @@ if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
 	url = 'https://github.com/lostanlen/scattering.m/archive/master.zip';
     
 	if exist(scattering_path, 'file') == 0		
-		urlwrite(url,[external_libraries_path,filesep,'scattering.m.zip']);
 		files = unzip([external_libraries_path,filesep,'scattering.m.zip'], ...
+		urlwrite(url,[external_libraries_path,'scattering.m.zip']);
             scattering_path);
-		delete([external_libraries_path,filesep,'scattering.m.zip']);
+		delete([external_libraries_path,'scattering.m.zip']);
 	end
 	foot();
 end
@@ -94,17 +94,15 @@ end
 % LIBLINEAR by Chih-Jeng Lin
 if (~exist([external_libraries_path, filesep, 'LIBLINEAR'], 'dir'))
     section_header('Install::LIBLINEAR');
-    liblinear_path = [external_libraries_path, filesep, 'LIBLINEAR'];
+    liblinear_path = [external_libraries_path,'LIBLINEAR'];
     url = 'https://github.com/cjlin1/liblinear/archive/v210.zip';
     if exist(liblinear_path, 'file') == 0		
-		urlwrite(url,[external_libraries_path,filesep,'v210.zip']);
 		files = unzip([external_libraries_path,filesep,'v210.zip'], ...
             liblinear_path);
-		delete([external_libraries_path,filesep,'v210.zip']);
+		urlwrite(url,[external_libraries_path,'v210.zip']);
         addpath(genpath([fileparts(mfilename('fullpath')), ...
             filesep,'external',filesep,'LIBLINEAR']));
         % Auto-compilation for UNIX systems
-        run(['./', liblinear_path, 'liblinear-210/Makefile']);
 	end
 	foot();
 end
@@ -116,7 +114,6 @@ if (~exist([external_libraries_path, filesep, 'MatConvNet'], 'dir'))
     version = 'autodiff-stable.zip';
     url = ['https://github.com/vlfeat/matconvnet/archive', filesep, version];
     if exist(matconvnet_path, 'file') == 0
-        urlwrite(url, [external_libraries_path, filesep, version]);
         files = ...
             unzip([external_libraries_path, filesep, version], matconvnet_path);
         delete([external_libraries_path, filesep, version]);
