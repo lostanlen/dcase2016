@@ -101,6 +101,10 @@ if (~exist([external_libraries_path, filesep, 'LIBLINEAR'], 'dir'))
 		files = unzip([external_libraries_path,filesep,'v210.zip'], ...
             liblinear_path);
 		delete([external_libraries_path,filesep,'v210.zip']);
+        addpath(genpath([fileparts(mfilename('fullpath')), ...
+            filesep,'external',filesep,'LIBLINEAR']));
+        % Auto-compilation for UNIX systems
+        run(['./', liblinear_path, 'liblinear-210/Makefile']);
 	end
 	foot();
 end
