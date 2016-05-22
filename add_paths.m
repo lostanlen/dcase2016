@@ -18,10 +18,8 @@ addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'YAMLMatlab
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'rastamat']);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'voicebox']);
 
-warning off;
 addpath(genpath([fileparts(mfilename('fullpath')),filesep,'external', ...
     filesep,'scattering.m']));
 
-addpath(genpath([fileparts(mfilename('fullpath')),filesep,'external', ...
-    filesep,'MatConvNet']));
-warning on;
+addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable']);
+vl_setupnn();
