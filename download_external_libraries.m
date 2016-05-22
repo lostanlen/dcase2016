@@ -88,3 +88,20 @@ if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
 	end
 	foot();
 end
+
+% MatConvNet by Andrea Vedaldi
+if (~exist([external_libraries_path,filesep,'MatConvNet'], 'dir'))
+    section_header('Install::MatConvNet');
+    matconvnet_path = [external_libraries_path, 'MatConvNet'];
+    url = ['http://www.vlfeat.org/matconvnet/download/', ...
+        'matconvnet-1.0-beta20.tar.gz'];
+    if exist(matconvnet_path, 'file') == 0
+        urlwrite(url, [external_libraries_path, filesep, ...
+            'matconvnet-1.0-beta20.tar.gz']);
+        files = untar([external_libraries_path, filesep, ...
+            'matconvnet-1.0-beta20.tar.gz'], matconvnet_path);
+        delete([external_libraries_path, filesep, ...
+            'matconvnet-1.0-beta20.tar.gz']);
+    end
+    foot();
+end
