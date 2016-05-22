@@ -102,7 +102,7 @@ if (~exist([external_libraries_path,'LIBLINEAR'], 'dir'))
         addpath(genpath([fileparts(mfilename('fullpath')), ...
             filesep,'external',filesep,'LIBLINEAR']));
         % Auto-compilation for UNIX systems
-        system(['make ', liblinear_path, '/liblinear-210/Makefile']);
+        system(['make -C ', liblinear_path, '/liblinear-210']);
 	end
 	foot();
 end
