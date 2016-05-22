@@ -93,15 +93,16 @@ end
 if (~exist([external_libraries_path,filesep,'MatConvNet'], 'dir'))
     section_header('Install::MatConvNet');
     matconvnet_path = [external_libraries_path, 'MatConvNet'];
-    url = ['http://www.vlfeat.org/matconvnet/download/', ...
-        'matconvnet-1.0-beta20.tar.gz'];
+    version = 'autodiff-stable.zip';
+    url = ['https://github.com/vlfeat/matconvnet/archive', filesep, version];
     if exist(matconvnet_path, 'file') == 0
-        urlwrite(url, [external_libraries_path, filesep, ...
-            'matconvnet-1.0-beta20.tar.gz']);
-        files = untar([external_libraries_path, filesep, ...
-            'matconvnet-1.0-beta20.tar.gz'], matconvnet_path);
-        delete([external_libraries_path, filesep, ...
-            'matconvnet-1.0-beta20.tar.gz']);
+        urlwrite(url, [external_libraries_path, filesep, version]);
+        files = ...
+            unzip([external_libraries_path, filesep, version], matconvnet_path);
+        delete([external_libraries_path, filesep, version]);
     end
+    addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable']);
+    vl_setupnn();
+    vl_compilenn('EnableImreadJpeg', false);
     foot();
 end
