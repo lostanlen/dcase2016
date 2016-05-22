@@ -19,7 +19,8 @@ addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'rastamat']
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'voicebox']);
 
 addpath(genpath([fileparts(mfilename('fullpath')),filesep,'external', ...
-    filesep,'scattering.m']));
+    filesep, 'scattering.m']));
 
-addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable']);
+addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable', filesep, ...
+    'matlab']);
 vl_setupnn();

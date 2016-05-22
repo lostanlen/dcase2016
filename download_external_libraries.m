@@ -101,7 +101,8 @@ if (~exist([external_libraries_path,filesep,'MatConvNet'], 'dir'))
             unzip([external_libraries_path, filesep, version], matconvnet_path);
         delete([external_libraries_path, filesep, version]);
     end
-    addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable']);
+    addpath([matconvnet_path, filesep, ...
+        'matconvnet-autodiff-stable', filesep, 'matlab']);
     vl_setupnn();
     vl_compilenn('EnableImreadJpeg', false);
     foot();
