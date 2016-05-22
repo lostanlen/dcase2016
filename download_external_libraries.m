@@ -74,6 +74,7 @@ if(~exist([external_libraries_path,filesep,'DataHash'],'dir')),
 	foot();
 end
 
+
 % scattering.m by Vincent Lostanlen
 if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
     section_header('Install::scattering.m');
@@ -85,6 +86,21 @@ if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
 		files = unzip([external_libraries_path,filesep,'scattering.m.zip'], ...
             scattering_path);
 		delete([external_libraries_path,filesep,'scattering.m.zip']);
+	end
+	foot();
+end
+
+
+% LIBLINEAR by Chih-Jeng Lin
+if (~exist([external_libraries_path, filesep, 'liblinear'))
+    section_header('Install::LIBLINEAR');
+    liblinear_path = [external_libraries_path, 'scattering.m'];
+    url = 'https://github.com/cjlin1/liblinear/archive/v210.zip';
+    if exist(liblinear_path, 'file') == 0		
+		urlwrite(url,[external_libraries_path,filesep,'v210.zip']);
+		files = unzip([external_libraries_path,filesep,'v210.zip'], ...
+            liblinear_path);
+		delete([external_libraries_path,filesep,'v210.zip']);
 	end
 	foot();
 end
