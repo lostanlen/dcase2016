@@ -51,39 +51,38 @@ if(~exist([external_libraries_path,filesep,'GetFullPath'],'dir')),
 	url = 'http://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/28249/versions/8/download/zip';
 	
 	if exist(getfullpath_path, 'file') == 0,		
-		urlwrite(url,[external_libraries_path,filesep,'GetFullPath.zip']);
-		files = unzip([external_libraries_path,filesep,'GetFullPath.zip'],getfullpath_path);
-		delete([external_libraries_path,filesep,'GetFullPath.zip']);
+		urlwrite(url,[external_libraries_path,'GetFullPath.zip']);
+		files = unzip([external_libraries_path,'GetFullPath.zip'],getfullpath_path);
+		delete([external_libraries_path,'GetFullPath.zip']);
 	end
 	foot();
 end
 
 
 % DataHash by Jan Simon
-if(~exist([external_libraries_path,filesep,'DataHash'],'dir')),
+if(~exist([external_libraries_path,'DataHash'],'dir')),
 	section_header('Install::DataHash');
 	datahash_path = [external_libraries_path,'DataHash'];
 	url = 'http://www.mathworks.com/matlabcentral/mlc-downloads/downloads/submissions/31272/versions/7/download/zip';
 	
 	if exist(datahash_path, 'file') == 0,		
-		urlwrite(url,[external_libraries_path,filesep,'DataHash.zip']);
-		files = unzip([external_libraries_path,filesep,'DataHash.zip'], ...
-            datahash_path);
-		delete([external_libraries_path,filesep,'DataHash.zip']);
+		urlwrite(url,[external_libraries_path,'DataHash.zip']);
+		files = unzip([external_libraries_path,'DataHash.zip'],datahash_path);
+		delete([external_libraries_path,'DataHash.zip']);
 	end
 	foot();
 end
 
 
 % scattering.m by Vincent Lostanlen
-if (~exist([external_libraries_path,filesep,'scattering.m'],'dir'))
+if (~exist([external_libraries_path,'scattering.m'],'dir'))
     section_header('Install::scattering.m');
     scattering_path = [external_libraries_path,'scattering.m'];
 	url = 'https://github.com/lostanlen/scattering.m/archive/master.zip';
     
 	if exist(scattering_path, 'file') == 0		
-		files = unzip([external_libraries_path,filesep,'scattering.m.zip'], ...
 		urlwrite(url,[external_libraries_path,'scattering.m.zip']);
+		files = unzip([external_libraries_path,'scattering.m.zip'], ...
             scattering_path);
 		delete([external_libraries_path,'scattering.m.zip']);
 	end
@@ -92,31 +91,32 @@ end
 
 
 % LIBLINEAR by Chih-Jeng Lin
-if (~exist([external_libraries_path, filesep, 'LIBLINEAR'], 'dir'))
+if (~exist([external_libraries_path,'LIBLINEAR'], 'dir'))
     section_header('Install::LIBLINEAR');
     liblinear_path = [external_libraries_path,'LIBLINEAR'];
     url = 'https://github.com/cjlin1/liblinear/archive/v210.zip';
     if exist(liblinear_path, 'file') == 0		
-		files = unzip([external_libraries_path,filesep,'v210.zip'], ...
-            liblinear_path);
 		urlwrite(url,[external_libraries_path,'v210.zip']);
+		files = unzip([external_libraries_path,'v210.zip'],liblinear_path);
+		delete([external_libraries_path,'v210.zip']);
         addpath(genpath([fileparts(mfilename('fullpath')), ...
             filesep,'external',filesep,'LIBLINEAR']));
         % Auto-compilation for UNIX systems
+        system(['./', liblinear_path, '/liblinear-210/Makefile']);
 	end
 	foot();
 end
 
 % MatConvNet by Andrea Vedaldi
-if (~exist([external_libraries_path, filesep, 'MatConvNet'], 'dir'))
+if (~exist([external_libraries_path,'MatConvNet'], 'dir'))
     section_header('Install::MatConvNet');
     matconvnet_path = [external_libraries_path, 'MatConvNet'];
     version = 'autodiff-stable.zip';
     url = ['https://github.com/vlfeat/matconvnet/archive', filesep, version];
     if exist(matconvnet_path, 'file') == 0
-        files = ...
-            unzip([external_libraries_path, filesep, version], matconvnet_path);
-        delete([external_libraries_path, filesep, version]);
+        urlwrite(url, [external_libraries_path, version]);
+        files = unzip([external_libraries_path, version], matconvnet_path);
+        delete([external_libraries_path, version]);
     end
     addpath([matconvnet_path, filesep, ...
         'matconvnet-autodiff-stable', filesep, 'matlab']);
