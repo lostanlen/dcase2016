@@ -18,9 +18,17 @@ addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'YAMLMatlab
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'rastamat']);
 addpath([fileparts(mfilename('fullpath')),filesep,'external',filesep,'voicebox']);
 
+% Scattering
 addpath(genpath([fileparts(mfilename('fullpath')),filesep,'external', ...
-    filesep, 'scattering.m']));
+    filesep,'scattering.m']));
 
-addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable', filesep, ...
-    'matlab']);
+
+% Support vector machines
+addpath(genpath([fileparts(mfilename('fullpath')),filesep,'external', ...
+    filesep,'LIBLINEAR']));
+make();
+
+% Deep convolutional networks
+addpath([matconvnet_path, filesep, 'matconvnet-autodiff-stable', ...
+    filesep,'matlab']);
 vl_setupnn();
