@@ -34,6 +34,8 @@ function do_feature_extraction(files, dataset, feature_path, ...
 check_path(feature_path);
 
 progress(1,'Extracting',(0 / length(files)), '');
+binaural_augmentation = default(feature_params, 'binaural_augmentation', false);
+
 for file_id = 1:length(files)
     audio_filename = files{file_id};
     [raw_path, raw_filename, ext] = fileparts(audio_filename);
@@ -46,9 +48,24 @@ for file_id = 1:length(files)
         if exist(dataset.relative_to_absolute_path(audio_filename), 'file')
             [y, fs] = load_audio( ...
                 dataset.relative_to_absolute_path(audio_filename), ...
-                'mono', true, 'target_fs', feature_params.fs);
+                'mono', ~binaural_augmentation, ...
+                'target_fs', feature_params.fs);
         else
             error(['Audio file not found [', audio_filename, ']']);                
+        end
+        
+        % Binaural augmentation
+        if binaural_augmentation
+            n_azimuths = feature_params.n_azimuths;
+            y_stereo = y;
+            y_azimuths = zeros(size(y_stereo, 1), n_azimuths);
+            pans = linspace(0, 1, n_azimuths);
+            for azimuth_index = 1:n_azimuths
+                pan = pans(azimuth_index);
+                y_azimuths(:, azimuth_index) = ...
+                    pan * y_stereo(:, 1) + (1-pan) * y_stereo(:, 2);
+            end
+            y = y_azimuths;
         end
 
         % Extract features
