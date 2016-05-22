@@ -92,9 +92,9 @@ end
 
 
 % LIBLINEAR by Chih-Jeng Lin
-if (~exist([external_libraries_path, filesep, 'liblinear'))
+if (~exist([external_libraries_path, filesep, 'LIBLINEAR'], 'dir'))
     section_header('Install::LIBLINEAR');
-    liblinear_path = [external_libraries_path, 'scattering.m'];
+    liblinear_path = [external_libraries_path, filesep, 'LIBLINEAR'];
     url = 'https://github.com/cjlin1/liblinear/archive/v210.zip';
     if exist(liblinear_path, 'file') == 0		
 		urlwrite(url,[external_libraries_path,filesep,'v210.zip']);
@@ -106,7 +106,7 @@ if (~exist([external_libraries_path, filesep, 'liblinear'))
 end
 
 % MatConvNet by Andrea Vedaldi
-if (~exist([external_libraries_path,filesep,'MatConvNet'], 'dir'))
+if (~exist([external_libraries_path, filesep, 'MatConvNet'], 'dir'))
     section_header('Install::MatConvNet');
     matconvnet_path = [external_libraries_path, 'MatConvNet'];
     version = 'autodiff-stable.zip';
