@@ -33,7 +33,7 @@ function do_feature_normalization(dataset, feature_normalizer_path, feature_path
     % Check that target path exists, create if not
     check_path(feature_normalizer_path);
     progress(1,'Collecting data',0,'');
-    for fold=dataset.folds(dataset_evaluation_mode)
+    parfor fold=dataset.folds(dataset_evaluation_mode)
         current_normalizer_file = get_feature_normalizer_filename(fold, feature_normalizer_path);
         if or(~exist(current_normalizer_file,'file'),overwrite)
             % Initialize statistics            
@@ -41,7 +41,7 @@ function do_feature_normalization(dataset, feature_normalizer_path, feature_path
             normalizer = FeatureNormalizer();
             train_items = dataset.train(fold);
             
-            parfor item_id=1:length(train_items)
+            for item_id=1:length(train_items)
                 item = train_items(item_id);
                 progress(0, 'Collecting data', ...
                     (item_id / length(train_items)), item.file, fold);
