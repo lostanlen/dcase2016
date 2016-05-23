@@ -69,7 +69,7 @@ else
         band = reshape(band, size(band, 1) * nChunks, nAzimuths, size(band, 3));
         band = permute(band, [3, 1, 4, 2]);
         feat = cat(1, feat, band(:, :, floor(end/2)));
-        scattergram(1:size(band,2), :, end + 1 - lambda2_index, :) = band;
+        scattergram(1:size(band,1), :, end + 1 - lambda2_index, :) = band;
     end
 end
 
