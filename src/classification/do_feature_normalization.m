@@ -41,7 +41,7 @@ function do_feature_normalization(dataset, feature_normalizer_path, feature_path
             normalizer = FeatureNormalizer();
             train_items = dataset.train(fold);
             
-            for item_id=1:length(train_items)
+            parfor item_id=1:length(train_items)
                 item = train_items(item_id);
                 progress(0, 'Collecting data', ...
                     (item_id / length(train_items)), item.file, fold);
