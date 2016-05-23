@@ -48,7 +48,7 @@ function do_system_testing(dataset, feature_path, result_path, model_path, featu
     check_path(result_path);
 
     progress(1, 'Testing', 0, '');
-    for fold=dataset.folds(dataset_evaluation_mode)        
+    parfor fold=dataset.folds(dataset_evaluation_mode)        
         current_result_file = get_result_filename(fold, result_path);
         if or(~exist(current_result_file, 'file'),overwrite)
             results = [];
@@ -65,8 +65,11 @@ function do_system_testing(dataset, feature_path, result_path, model_path, featu
 
             for item_id=1:length(test_items)
                 item = test_items(item_id);
-                progress(0, 'Testing', (item_id / length(test_items)), item.file,fold);
-
+                if fold == 1
+                    progress(0, 'Testing', ...
+                        (item_id / length(test_items)), item.file,fold);
+                end
+                
                 % Load features
                 feature_filename = get_feature_filename(item.file, feature_path);
                 if exist(feature_filename, 'file')
