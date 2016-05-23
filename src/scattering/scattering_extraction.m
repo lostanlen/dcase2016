@@ -55,23 +55,22 @@ end
 %%
 S1 = S{1+1}.data((1+end/4):(3*end/4), :, :);
 S1 = reshape(S1, size(S1, 1) * nChunks, nAzimuths, size(S1, 3));
+S1 = permute(S1, [3, 1, 4, 2]);
 
 %%
 if iscell(S{1+2})
 else
-    [nFrames, nLambda1s, ~] = size(S1);
+    [nLambda1s, nFrames, ~] = size(S1);
     nLambda2s = length(S{1+2}.data);
-    scattergram = cat(3, S1, zeros(nFrames, nLambda1s, nLambda2s, nAzimuths));
-    feat = S1(:, :, :, floor(end/2));
+    scattergram = cat(3, S1, zeros(nLambda1s, nFrames, nLambda2s, nAzimuths));
+    feat = S1(:, :, 1, floor(end/2));
     for lambda2_index = 1:nLambda2s
         band = S{1+2}.data{lambda2_index}((1+end/4):(3*end/4), :, :);
-        band = reshape(band, ...
-            size(band, 1) * nChunks, nAzimuths, size(band, 3));
-        feat = cat(2, feat, squeeze(band(:, floor(end/2), :)));
-        band = permute(band, [1, 3, 4, 2]);
-        scattergram(:, 1:size(band,2), end + 1 - lambda2_index, :) = band;
+        band = reshape(band, size(band, 1) * nChunks, nAzimuths, size(band, 3));
+        band = permute(band, [3, 1, 4, 2]);
+        feat = cat(1, feat, band(:, :, floor(end/2)));
+        scattergram(1:size(band,2), :, end + 1 - lambda2_index, :) = band;
     end
-    feat = feat.';
 end
 
 %%
