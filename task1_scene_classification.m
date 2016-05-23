@@ -1,4 +1,5 @@
 function task1_scene_classification(varargin)
+%%
 download_external_libraries(); % Download external libraries
 add_paths();   % Add file paths
 
@@ -6,8 +7,8 @@ rng(123456); % let's make randomization predictable
 
 parser = inputParser;
 parser.addOptional('mode', 'development', @isstr);
-parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
-%parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
+%parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
 parse(parser, varargin{:});
 
 params = load_parameters(parser.Results.yaml_path);
@@ -82,7 +83,7 @@ if params.flow.extract_features
     
     foot();
 end
-% Prepare feature normalizers
+%% Prepare feature normalizers
 % ==================================================
 if params.flow.feature_normalizer
     section_header('Feature normalizer');
@@ -93,19 +94,20 @@ if params.flow.feature_normalizer
         params.general.overwrite);
     foot();
 end
+
 % System training
 % ==================================================
 if params.flow.train_system
     section_header('System training');
-    
-    do_system_training(dataset,...
-        params.path.models,...
-        params.path.feature_normalizers,...
-        params.path.features,...
-        params.classifier.parameters,...
-        dataset_evaluation_mode,...
-        params.classifier.method,...
-        params.general.overwrite);
+    model_path = params.path.models;
+    feature_normalizer_path = params.path.feature_normalizers;
+    feature_path = params.path.features;
+    classifier_params = params.classifier.parameters;
+    classifier_method = params.classifier.method;
+    overwrite = params.general.overwrite;
+    do_system_training(dataset, model_path, feature_normalizer_path, ...
+        feature_path, classifier_params, dataset_evaluation_mode, ...
+        classifier_method, overwrite);
     
     foot();
 end
