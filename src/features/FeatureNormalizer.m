@@ -26,10 +26,17 @@ classdef FeatureNormalizer < handle
         S1 = 0;
         S2 = 0;
         std = 0;
+        
+        cumulative_energy_threshold = 0.0;
+        
+        transformation = struct('type', 'identity');
     end
     
     methods
-        function obj = FeatureNormalizer(feature_matrix)
+        function obj = FeatureNormalizer( ...
+                feature_matrix, ...
+                cumulative_energy_threshold, ...
+                transformation)
             % Initialization
             %
             % Parameters
@@ -38,12 +45,20 @@ classdef FeatureNormalizer < handle
             %     Feature matrix to be used in the initialization
             % 
 
-            if(nargin == 1)
-                obj.mean = mean(feature_matrix,2);
-                obj.std = std(feature_matrix')';
-                obj.N = size(feature_matrix,2);
-                obj.S1 = sum(feature_matrix,2);
-                obj.S2 = sum(feature_matrix.^2,2);                
+            if nargin > 0
+                obj.mean = mean(feature_matrix, 2);
+                obj.std = std(feature_matrix, 2, 0);
+                obj.N = size(feature_matrix, 2);
+                obj.S1 = sum(feature_matrix, 2);
+                obj.S2 = sum(feature_matrix.^2, 2);                
+            end
+            
+            if nargin > 1
+                obj.cumulative_energy_threshold = cumulative_energy_threshold;
+            end
+            
+            if nargin > 2
+                obj.transformation = transformation;
             end
         end
         
@@ -91,7 +106,8 @@ classdef FeatureNormalizer < handle
             % 
 
             obj.mean = obj.S1 / obj.N;
-            obj.std = sqrt((obj.N * obj.S2 - (obj.S1 .* obj.S1)) / (obj.N .* (obj.N - 1)));
+            obj.std = ...
+                sqrt((obj.N * obj.S2 - (obj.S1 .* obj.S1)) / (obj.N .* (obj.N - 1)));
         end
                 
         function feature_matrix = normalize(obj, feature_matrix)  
