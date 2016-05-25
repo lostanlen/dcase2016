@@ -29,14 +29,14 @@ classdef FeatureNormalizer < handle
         
         cumulative_energy_threshold = 0.0;
         
-        transformation = struct('type', 'identity');
+        monotonic_transformation = struct('type', 'identity');
     end
     
     methods
         function obj = FeatureNormalizer( ...
                 feature_matrix, ...
                 cumulative_energy_threshold, ...
-                transformation)
+                monotonic_transformation)
             % Initialization
             %
             % Parameters
@@ -58,7 +58,7 @@ classdef FeatureNormalizer < handle
             end
             
             if nargin > 2
-                obj.transformation = transformation;
+                obj.monotonic_transformation = monotonic_transformation;
             end
         end
         
