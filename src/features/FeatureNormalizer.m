@@ -34,32 +34,13 @@ classdef FeatureNormalizer < handle
     
     methods
         function obj = FeatureNormalizer( ...
-                feature_matrix, ...
-                cumulative_energy_threshold, ...
-                monotonic_transformation)
+                cumulative_energy_threshold, monotonic_transformation)
             % Initialization
             %
-            % Parameters
-            % ----------
-            % feature_matrix : matrix [shape=(number of feature values, frames)] or None
-            %     Feature matrix to be used in the initialization
-            % 
 
-            if nargin > 0
-                obj.mean = mean(feature_matrix, 2);
-                obj.std = std(feature_matrix, 2, 0);
-                obj.N = size(feature_matrix, 2);
-                obj.S1 = sum(feature_matrix, 2);
-                obj.S2 = sum(feature_matrix.^2, 2);                
-            end
+            obj.cumulative_energy_threshold = cumulative_energy_threshold;
             
-            if nargin > 1
-                obj.cumulative_energy_threshold = cumulative_energy_threshold;
-            end
-            
-            if nargin > 2
-                obj.monotonic_transformation = monotonic_transformation;
-            end
+            obj.monotonic_transformation = monotonic_transformation;
         end
         
         function accumulate(obj, stat)  
