@@ -7,8 +7,8 @@ rng(123456); % let's make randomization predictable
 
 parser = inputParser;
 parser.addOptional('mode', 'development', @isstr);
-%parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
-parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
+parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+%parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
 parse(parser, varargin{:});
 
 params = load_parameters(parser.Results.yaml_path);
