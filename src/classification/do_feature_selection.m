@@ -1,12 +1,16 @@
 function do_feature_selection(dataset, selection, ...
     feature_selector_path, feature_path, ...
     dataset_evaluation_mode, overwrite)
+check_path(feature_selector_path);
 criterion = selection.criterion;
 epsilon = selection.epsilon;
 progress(1, 'Collecting data', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)
     current_selector_file = ...
         get_feature_selector_filename(fold, feature_selector_path);
+    if and(exist(current_selector_file,'file'), ~overwrite)
+        continue
+    end
     example_cells = cell(1, length(train_items));
     for item_id = 1:length(train_items)
         item = train_items(item_id);
@@ -30,4 +34,3 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
 end
 disp('  ');
 end
-
