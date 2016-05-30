@@ -26,21 +26,24 @@ classdef FeatureNormalizer < handle
         S1 = 0;
         S2 = 0;
         std = 0;
-        
-        cumulative_energy_threshold = 0.0;
-        
-        monotonic_transformation = struct('type', 'identity');
     end
     
     methods
-        function obj = FeatureNormalizer( ...
-                cumulative_energy_threshold, monotonic_transformation)
+        function obj = FeatureNormalizer(feature_matrix)
             % Initialization
             %
-
-            obj.cumulative_energy_threshold = cumulative_energy_threshold;
-            
-            obj.monotonic_transformation = monotonic_transformation;
+            % Parameters
+            % ----------
+            % feature_matrix : matrix [shape=(number of feature values, frames)] or None
+            %     Feature matrix to be used in the initialization
+            % 
+            if nargin > 0
+                obj.mean = mean(feature_matrix, 2);
+                obj.std = std(feature_matrix, 2, 0);
+                obj.N = size(feature_matrix, 2);
+                obj.S1 = sum(feature_matrix, 2);
+                obj.S2 = sum(feature_matrix.^2, 2);                
+            end
         end
         
         function accumulate(obj, stat)  
@@ -88,7 +91,18 @@ classdef FeatureNormalizer < handle
 
             obj.mean = obj.S1 / obj.N;
             obj.std = ...
-                sqrt((obj.N * obj.S2 - (obj.S1 .* obj.S1)) / (obj.N .* (obj.N - 1)));
+                sqrt((obj.N * obj.S2 - (obj.S1 .* obj.S1)) / ...
+                (obj.N .* (obj.N - 1)));
+            
+            if obj.cumulative_energy_threshold > 0.0
+                [sorted_energies, sorting_indices] = sort(obj.S2);
+                cumulative_energies = cumsum(sorted_energies);
+                cumulative_energies = ...
+                    cumulative_energies / cumulative_energies(end);
+                start = find(cumulative_energies > ...
+                    obj.cumulative_energy_threshold, 1);
+                obj.feature_indices = sorting_indices(start:end);
+            end
         end
                 
         function feature_matrix = normalize(obj, feature_matrix)  
