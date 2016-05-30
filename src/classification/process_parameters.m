@@ -59,4 +59,8 @@ params.path.models = fullfile(params.path.base, ...
     params.path.models, params.features.hash, params.classifier.hash);
 params.path.results = fullfile(params.path.base, ...
     params.path.results, params.features.hash, params.classifier.hash);
+
+if ~isfield(params.flow, 'feature_transformation')
+    params.flow.feature_transformation = false;
+end
 end
