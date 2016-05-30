@@ -281,7 +281,9 @@ and Deep Convolutional Networks}
 % use a multiple column layout for up to three different
 % affiliations
 \author{\IEEEauthorblockN{Vincent Lostanlen
-\thanks{This work is supported by the ERC InvariantClass grant 320959.}}
+\thanks{This work is supported by the ERC InvariantClass grant 320959.
+The source code to reproduce figures and experiments is freely available at
+\protect\url{http://www.github.com/lostanlen/dcase2016}.}}
 \IEEEauthorblockA{\'{E}cole normale sup\'{e}rieure \\ 45 rue d'Ulm, 75005 Paris, France}
 }
 % make the title area
@@ -295,14 +297,17 @@ The abstract goes here.
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-Classification of acoustic scenes is only made possible by integrating
-signal information over a long temporal context.
+
+Fine-grained classification of acoustic scenes is only made
+possible by integrating signal information over a long temporal context.
 Whereas a few seconds are often sufficient to recognize a speaker,
 a musical instrument, or a genre, it may require up to 30 seconds
 to disambiguate closely related acoustic scenes.
 % Assumption of stationarity
 % Long-range dependencies
 % A challenge in temporal integration
+
+%Our main contribution is to
 
 % Contribution:
 % Online data augmentation to enforce invariance to binaural azimuth
@@ -326,7 +331,7 @@ Applying pointwise complex modulus to $\boldsymbol{y_1}$ yields
 the wavelet scalogram
 $\boldsymbol{x_1}[t, k_1]
 = \vert \boldsymbol{y_1}[t, k_1] \vert$,
-also called constant $Q$ transform (CQT),
+also called constant-$Q$ transform (CQT),
 indexed by time $t$ and log-frequency $k_1$.
 
 Time-frequency scattering consists in convolving
@@ -341,7 +346,8 @@ $23\,\mathrm{ms}$ and $370\,\mathrm{ms}$ according
 to a geometric sequence.
 The log-frequential scale $\beta$ takes $5$ values
 between $1/4^{\mathrm{th}}$ of an octave and
-$4$ octaves, as well as its $5$ "mirror" frequencies.
+$4$ octaves, as well as their $5$ "mirror" frequencies,
+according to a geometric sequence.
 In addition, the edge case $\beta = \infty$ corresponds
 to a log-frequential low-pass filter along $4$ octaves
 according to all $5$ temporal scales $\alpha$.
@@ -438,6 +444,8 @@ height $\Delta k_1$.
 The hidden units in $\boldsymbol{x_3}$ are in turn fed to a second layer of convolutions,
 ReLU, and pooling.
 
+Data augmentation is a simple, yet effective, way to enforce invariance in feature learning
+is to 
 \begin{equation}
 \boldsymbol{x}[t] =
 r \times \boldsymbol{x^{\mathsf{L}}}[t]
