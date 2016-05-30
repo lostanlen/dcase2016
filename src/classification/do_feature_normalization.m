@@ -52,20 +52,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             if exist(get_feature_filename(item.file, feature_path), 'file')
                 feature_data = ...
                     load_data(get_feature_filename(item.file, feature_path));
-                if isfield(feature_data, 'stat')
-                    % MFCC branch
-                    feature_data = feature_data.stat;
-                else
-                    % Scattering branch
-                    feature_matrix = permute(feature_data, [3, 2, 1, 4]);
-                    feature_matrix = feature_matrix(:, :, :);
-                    feature_data = struct( ...
-                         'mean', mean(feature_matrix, 3),...
-                         'std',std(feature_matrix,0, 3),...
-                         'N',size(feature_matrix, 3),...
-                         'S1',sum(feature_matrix, 3),...
-                         'S2',sum(feature_matrix.^2, 3));
-                end
+                feature_data = feature_data.stat;
             else
                 error(['Features not found [', item.file, ']']);
             end
