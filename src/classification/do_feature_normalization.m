@@ -1,12 +1,5 @@
 function do_feature_normalization(dataset, feature_normalizer_path, ...
-    feature_path, dataset_evaluation_mode, overwrite, ...
-    cumulative_energy_threshold, monotonic_transformation)
-    if nargin < 7
-        monotonic_transformation = 'identity';
-    end
-    if nargin < 6
-        cumulative_energy_threshold = 0.0;
-    end
+    feature_path, dataset_evaluation_mode, overwrite)
     % Feature normalization
     %
     % Calculated normalization factors for each evaluation fold based on the training material available.
@@ -42,12 +35,12 @@ function do_feature_normalization(dataset, feature_normalizer_path, ...
     check_path(feature_normalizer_path);
     progress(1,'Collecting data',0,'');
     parfor fold=dataset.folds(dataset_evaluation_mode)
-        current_normalizer_file = get_feature_normalizer_filename(fold, feature_normalizer_path);
+        current_normalizer_file = ...
+            get_feature_normalizer_filename(fold, feature_normalizer_path);
         if or(~exist(current_normalizer_file,'file'),overwrite)
             % Initialize statistics            
             file_count = length(dataset.train(fold));
-            normalizer = FeatureNormalizer( ...
-                cumulative_energy_threshold, monotonic_transformation);
+            normalizer = FeatureNormalizer();
             train_items = dataset.train(fold);
             
             for item_id=1:length(train_items)
