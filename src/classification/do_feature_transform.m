@@ -10,6 +10,7 @@ parfor fold = dataset.folds(dataset_evaluation_mode)
     if and(exist(current_transform_file,'file'), ~overwrite)
         continue
     end
+    train_items = dataset.train(fold);
     example_cells = cell(1, length(train_items));
     for item_id = 1:length(train_items)
         item = train_items(item_id);
@@ -23,7 +24,7 @@ parfor fold = dataset.folds(dataset_evaluation_mode)
         nFeatures = size(X, 1);
         lambdas = nan(nFeatures, 1);
         for feature_index = 1:nFeatures
-            [~, lambdas(feature_index)] = boxcox(X);
+            [~, lambdas(feature_index)] = boxcox(X(feature_index, :));
         end
     end
     feature_transform = struct('lambdas', lambdas);
