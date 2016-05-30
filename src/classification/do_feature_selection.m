@@ -1,9 +1,12 @@
-function do_feature_selection(dataset, selection, feature_path, ...
+function do_feature_selection(dataset, selection, ...
+    feature_selector_path, feature_path, ...
     dataset_evaluation_mode, overwrite)
 criterion = selection.criterion;
 epsilon = selection.epsilon;
 progress(1, 'Collecting data', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)
+    current_selector_file = ...
+        get_feature_selector_filename(fold, feature_selector_path);
     example_cells = cell(1, length(train_items));
     for item_id = 1:length(train_items)
         item = train_items(item_id);
@@ -23,7 +26,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
     end
     feature_selector = struct('indices', feature_indices);
     % Save
-    save_data(current_normalizer_file, feature_indices);
+    save_data(current_selector_file, feature_selector);
 end
 disp('  ');
 end
