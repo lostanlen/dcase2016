@@ -93,16 +93,6 @@ classdef FeatureNormalizer < handle
             obj.std = ...
                 sqrt((obj.N * obj.S2 - (obj.S1 .* obj.S1)) / ...
                 (obj.N .* (obj.N - 1)));
-            
-            if obj.cumulative_energy_threshold > 0.0
-                [sorted_energies, sorting_indices] = sort(obj.S2);
-                cumulative_energies = cumsum(sorted_energies);
-                cumulative_energies = ...
-                    cumulative_energies / cumulative_energies(end);
-                start = find(cumulative_energies > ...
-                    obj.cumulative_energy_threshold, 1);
-                obj.feature_indices = sorting_indices(start:end);
-            end
         end
                 
         function feature_matrix = normalize(obj, feature_matrix)  
