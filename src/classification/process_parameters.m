@@ -45,8 +45,23 @@ elseif isfield(params.features, 'scattering')
     params.features.scattering.archs = sc_setup(opts);
 end
 
+if ~isfield(params.path, 'feature_selectors')
+    params.path.feature_selectors = 'feature_selectors/';
+end
+if ~isfield(params.path, 'feature_transforms')
+    params.path.feature_transforms = 'feature_transforms/';
+end
+
 params.classifier.parameters = ...
     getfield(params.classifier_parameters, params.classifier.method);
+
+if ~isfield(params.flow, 'feature_selection')
+    params.flow.feature_selection = false;
+else
+end
+if ~isfield(params.flow, 'feature_transformation')
+    params.flow.feature_transformation = false;
+end
 
 params.features.hash = get_parameter_hash(params.features);
 params.classifier.hash = get_parameter_hash(params.classifier);
@@ -60,10 +75,10 @@ params.path.models = fullfile(params.path.base, ...
 params.path.results = fullfile(params.path.base, ...
     params.path.results, params.features.hash, params.classifier.hash);
 
-if ~isfield(params.flow, 'feature_selection')
-    params.flow.feature_selection = false;
-end
-if ~isfield(params.flow, 'feature_transformation')
-    params.flow.feature_transformation = false;
-end
+params.path.feature_selectors = fullfile(params.path.base, ...
+    params.path.feature_selectors, params.features.hash);
+params.path.feature_transforms = fullfile(params.path.base, ...
+    params.path.feature_selectors, params.features.hash);
+
+
 end
