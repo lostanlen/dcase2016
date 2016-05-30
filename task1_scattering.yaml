@@ -4,6 +4,8 @@
 flow:
   initialize: true
   extract_features: true
+  feature_selection: true
+  feature_transform: true
   feature_normalizer: true
   train_system: true
   test_system: true
@@ -31,6 +33,19 @@ path:
   results: evaluation_results/
 
   challenge_results: challenge_submission/task_1_acoustic_scene_classification/
+
+# ==========================================================
+# Feature selection
+# ==========================================================
+selection:
+  criterion: energy
+  epsilon: 0.1
+
+# ==========================================================
+# Feature transform
+# ==========================================================
+transform:
+  type: boxcox
 
 # ==========================================================
 # Feature extraction
