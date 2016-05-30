@@ -6,7 +6,7 @@ transform_type = transform.type;
 progress(1, 'Collecting data', 0, '');
 parfor fold = dataset.folds(dataset_evaluation_mode)
     current_transform_file = ...
-        get_feature_transform_filename(fold, feature_selector_path);
+        get_feature_transform_filename(fold, feature_transform_path);
     if and(exist(current_transform_file,'file'), ~overwrite)
         continue
     end
