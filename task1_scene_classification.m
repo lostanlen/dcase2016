@@ -7,8 +7,8 @@ rng(123456); % let's make randomization predictable
 
 parser = inputParser;
 parser.addOptional('mode', 'development', @isstr);
-parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
-%parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
+%parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
+parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
 parse(parser, varargin{:});
 
 params = load_parameters(parser.Results.yaml_path);
@@ -83,14 +83,25 @@ if params.flow.extract_features
     
     foot();
 end
+
+%% Discard negligible features, apply nonlinear transformation
+if params.flow.feature_transformation
+    section_header('Feature transform');
+    do_feature_transformation(data, ...
+        params.path.feature_transforms, ...
+        params.path.features, ...
+        dataset_evaluation_mode, ...
+        params.general.overwrite);
+end
+
 %% Prepare feature normalizers
 % ==================================================
 if params.flow.feature_normalizer
     section_header('Feature normalizer');
-    do_feature_normalization(dataset,...
-        params.path.feature_normalizers,...
-        params.path.features,...
-        dataset_evaluation_mode,...
+    do_feature_normalization(dataset, ...
+        params.path.feature_normalizers, ...
+        params.path.features, ...
+        dataset_evaluation_mode, ...
         params.general.overwrite);
     foot();
 end
