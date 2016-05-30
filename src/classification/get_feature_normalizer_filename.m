@@ -23,5 +23,5 @@ function filename = get_feature_normalizer_filename(fold, path, extension)
     if nargin < 3
         extension = 'mat';
     end    
-    filename = fullfile(path, ['scale_fold',num2str(fold), '.', extension]);
+    filename = fullfile(path, ['scale_fold', num2str(fold), '.', extension]);
 end
