@@ -135,6 +135,7 @@ if(args.development && ~args.challenge)
         feature_path = params.path.features;
         result_path = params.path.results;
         model_path = params.path.models;
+        feature_params = params.features;
         classifier_method = params.classifier.method;
         overwrite = params.general.overwrite;
         
