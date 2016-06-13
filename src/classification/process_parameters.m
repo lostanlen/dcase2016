@@ -32,10 +32,14 @@ elseif isfield(params.features, 'scattering')
     opts{1}.time.gamma_bounds = [1 p.Q1*p.J1];
     opts{1}.time.S_log2_oversampling = log2_oversampling;
     opts{1}.time.size = 2^19;
+    opts{1}.time.max_scale = Inf;
+    opts{1}.time.wavelet_handle = @morlet_1d;
     opts{2}.time.max_Q = p.Q2_time;
     opts{2}.time.gamma_bounds = [4*p.Q2_time p.Q2_time*p.J2_time];
     opts{2}.time.sibling_mask_factor = 2^5;
     opts{2}.time.S_log2_oversampling = log2_oversampling;
+    opts{2}.time.max_scale = Inf;
+    opts{2}.time.wavelet_handle = @morlet_1d;
     if isfield(p, 'J2_freq') && isfield(p, 'Q2_freq')
         opts{2}.gamma.max_Q = p.Q2_freq;
         opts{2}.gamma.T = 2^(p.J2_freq);
