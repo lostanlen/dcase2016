@@ -49,7 +49,7 @@ function do_system_training(dataset, model_path, feature_normalizer_path, ...
 
 feature_selection = params.flow.feature_selection;
 if feature_selection
-    
+    feature_selector_path = params.path.feature_selectors;
 end
 
 if isfield(params, 'transform')
@@ -68,6 +68,13 @@ progress(1, 'Collecting data', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)        
     current_model_file = get_model_filename(fold, model_path);
     if or(~exist(current_model_file, 'file'), overwrite)
+        % Load selector
+        if feature_selection
+            feature_selector_filename = ...
+                get_feature_selector_filename(fold, feature_selector_path);
+            feature_selector = load_data(feature_selector_filename);
+        end
+        
         % Load normalizer
         feature_normalizer_filename = ...
             get_feature_normalizer_filename(fold, feature_normalizer_path);
@@ -100,9 +107,12 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                 error(['Features not found [', item.file, ']']);
             end
             
+            % Select features
             if feature_selection
+                feature_data = feature_data(:, feature_selector.indices);
             end
             
+            % Transform features
             if strcmp(transformation, 'log')
                 feature_data = log(eps() + feature_data);
             end
