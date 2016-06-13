@@ -31,6 +31,12 @@ function do_feature_normalization(dataset, feature_normalizer_path, ...
 %     Features not found.
 %
 
+if isfield(params, 'transform')
+    transformation = params.transform;
+else
+    transformation = 'identity';
+end
+
 % Check that target path exists, create if not
 check_path(feature_normalizer_path);
 progress(1,'Collecting data',0,'');
@@ -55,6 +61,10 @@ parfor fold = dataset.folds(dataset_evaluation_mode)
                 feature_data = feature_data.stat;
             else
                 error(['Features not found [', item.file, ']']);
+            end
+            
+            if strcmp(transformation, 'log')
+                feature_data = log(eps() + feature_data);
             end
 
             % Accumulate statistics
