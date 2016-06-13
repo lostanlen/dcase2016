@@ -45,7 +45,7 @@ selection:
 # Feature transform
 # ==========================================================
 transform:
-  type: boxcox
+  type: log
 
 # ==========================================================
 # Feature extraction

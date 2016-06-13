@@ -96,18 +96,6 @@ if params.flow.feature_selection
         params.general.overwrite);
 end
 
-%% Apply nonlinear transformation
-% ==================================================
-if params.flow.feature_transform
-    section_header('Feature transform');
-    do_feature_transform(dataset, ...
-        params.transform, ...
-        params.path.feature_transforms, ...
-        params.path.features, ...
-        dataset_evaluation_mode, ...
-        params.general.overwrite);
-end
-
 %% Prepare feature normalizers
 % ==================================================
 if params.flow.feature_normalizer

@@ -20,7 +20,7 @@ parfor fold = dataset.folds(dataset_evaluation_mode)
         example_cells{item_id} = example.feat;
     end
     X = [example_cells{:}];
-    if strcmp(transform_type, 'boxcox')
+    if strcmp(transform_type, 'log')
         nFeatures = size(X, 1);
         lambdas = nan(nFeatures, 1);
         for feature_index = 1:nFeatures
