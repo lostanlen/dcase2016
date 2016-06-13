@@ -60,6 +60,8 @@ end
 % Check that target path exists, create if not
 check_path(result_path);
 
+feature_params_fs = feature_params.fs;
+
 progress(1, 'Testing', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)        
     current_result_file = get_result_filename(fold, result_path);
@@ -87,7 +89,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             model_container.normalizer = normalizer;
         end
 
-        feature_params_fs = feature_params.fs;
         test_items = dataset.test(fold);
 
         for item_id=1:length(test_items)
