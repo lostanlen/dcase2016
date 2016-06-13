@@ -65,7 +65,7 @@ feature_params_fs = feature_params.fs;
 progress(1, 'Testing', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)        
     current_result_file = get_result_filename(fold, result_path);
-    if or(~exist(current_result_file, 'file'),overwrite)
+    if or(~exist(current_result_file, 'file'), overwrite)
         results = [];
         
         % Load class model container
@@ -81,12 +81,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             feature_selector_filename = ...
                 get_feature_selector_filename(fold, feature_selector_path);
             feature_selector = load_data(feature_selector_filename);
-            normalizer = model_container.normalizer;
-            normalizer.mean = normalizer.mean(feature_selector.indices);
-            normalizer.S1 = normalizer.S1(feature_selector.indices);
-            normalizer.S2 = normalizer.S2(feature_selector.indices);
-            normalizer.std = normalizer.std(feature_selector.indices);
-            model_container.normalizer = normalizer;
         end
 
         test_items = dataset.test(fold);
