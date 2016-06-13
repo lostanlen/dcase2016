@@ -1,5 +1,5 @@
 function do_system_training(dataset, model_path, feature_normalizer_path, ...
-    feature_path, classifier_params, dataset_evaluation_mode, ...
+    feature_path, params, classifier_params, dataset_evaluation_mode, ...
     classifier_method, overwrite)
 % System training
 %
@@ -47,6 +47,17 @@ function do_system_training(dataset, model_path, feature_normalizer_path, ...
 %     Feature file not found.
 %
 
+feature_selection = params.flow.feature_selection;
+if feature_selection
+    
+end
+
+if isfield(params, 'transform')
+    transformation = params.transform;
+else
+    transformation = 'identity';
+end
+
 if ~strcmp(classifier_method, 'gmm')
     error(['Unknown classifier method [', classifier_method, ']']);
 end
@@ -87,6 +98,13 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                 feature_data = feature_data.feat;
             else
                 error(['Features not found [', item.file, ']']);
+            end
+            
+            if feature_selection
+            end
+            
+            if strcmp(transformation, 'log')
+                feature_data = log(eps() + feature_data);
             end
 
             % Normalize features

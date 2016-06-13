@@ -1,5 +1,5 @@
 function do_feature_normalization(dataset, feature_normalizer_path, ...
-    feature_path, dataset_evaluation_mode, overwrite)
+    feature_path, params, dataset_evaluation_mode, overwrite)
 % Feature normalization
 %
 % Calculated normalization factors for each evaluation fold based on the training material available.
