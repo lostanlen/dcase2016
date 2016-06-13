@@ -68,13 +68,6 @@ progress(1, 'Collecting data', 0, '');
 parfor fold=dataset.folds(dataset_evaluation_mode)        
     current_model_file = get_model_filename(fold, model_path);
     if or(~exist(current_model_file, 'file'), overwrite)
-        % Load selector
-        if feature_selection
-            feature_selector_filename = ...
-                get_feature_selector_filename(fold, feature_selector_path);
-            feature_selector = load_data(feature_selector_filename);
-        end
-        
         % Load normalizer
         feature_normalizer_filename = ...
             get_feature_normalizer_filename(fold, feature_normalizer_path);
@@ -85,10 +78,21 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                 feature_normalizer_filename, ']']);
         end
 
+        % Load selector
+        if feature_selection
+            feature_selector_filename = ...
+                get_feature_selector_filename(fold, feature_selector_path);
+            feature_selector = load_data(feature_selector_filename);
+            normalizer.mean = normalizer.mean(feature_selector.indices);
+            normalizer.S1 = normalizer.S1(feature_selector.indices);
+            normalizer.S2 = normalizer.S2(feature_selector.indices);
+            normalizer.std = normalizer.std(feature_selector.indices);
+        end
+        
         % Initialize model container
         model_container = struct('normalizer', normalizer, ...
             'models', containers.Map() );
-
+        
         % Collect training examples            
         train_items = dataset.train(fold);
         data = containers.Map();
@@ -109,7 +113,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             
             % Select features
             if feature_selection
-                feature_data = feature_data(:, feature_selector.indices);
+                feature_data = feature_data(feature_selector.indices, :);
             end
             
             % Transform features
