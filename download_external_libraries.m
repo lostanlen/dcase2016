@@ -103,6 +103,7 @@ if (~exist([external_libraries_path,'LIBLINEAR'], 'dir'))
             filesep,'external',filesep,'LIBLINEAR']));
         % Auto-compilation for UNIX systems
         system(['make -C ', liblinear_path, '/liblinear-210']);
+        run([liblinear_path '/liblinear-210/matlab/make.m']);
 	end
 	foot();
 end
