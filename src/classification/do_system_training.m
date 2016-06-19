@@ -29,8 +29,8 @@ function do_system_training(dataset, model_path, feature_normalizer_path, ...
 %     evaluation mode, 'full' all material available is considered to
 %     belong to one fold.
 %
-% classifier_method : str ['gmm']
-%     classifier method, currently only GMM supported
+% classifier_method : str ['gmm', 'liblinear']
+%     classifier method, currently only GMM and LIBLINEAR supported
 %
 % overwrite : bool
 %     overwrite existing models

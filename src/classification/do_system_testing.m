@@ -25,8 +25,8 @@ function do_system_testing(dataset, feature_path, result_path, model_path, ...
 % dataset_evaluation_mode : str ['folds', 'full']
 %     evaluation mode, 'full' all material available is considered to belong to one fold.
 % 
-% classifier_method : str ['gmm']
-%     classifier method, currently only GMM supported
+% classifier_method : str ['gmm', 'liblinear']
+%     classifier method, currently only GMM and LIBLINEAR supported
 % 
 % overwrite : bool
 %     overwrite existing models
