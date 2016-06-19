@@ -69,11 +69,11 @@ features:
 # Classifier
 # ==========================================================
 classifier:
-  method: gmm                   # Currently system supports only gmm
+  method: liblinear
   parameters: !!null            # Parameters are copied from classifier.parameters based on defined method
 
 classifier_parameters:
-  gmm:
-    n_components: 16            # Number of Gaussian components
-    min_covar: 0.001
-    n_iter: 40
+  liblinear:
+    type: 2
+    C: 1
+    bias: 1
