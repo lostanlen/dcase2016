@@ -54,7 +54,7 @@ else
     transformation = 'identity';
 end
 
-if ~strcmp(classifier_method,'gmm')
+if ~any(strcmp(classifier_method,{'gmm','liblinear'}))
     error(['Unknown classifier method [',classifier_method,']']);
 end
 % Check that target path exists, create if not
@@ -134,6 +134,9 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             if strcmp(classifier_method, 'gmm')
                 current_result = ...
                     do_classification_gmm(feature_data, model_container);
+            elseif strcmp(classifier_method, 'liblinear')
+                current_result = ...
+                    do_classification_liblinear(feature_data, model_container);
             else
                error(['Unknown classifier method ', classifier_method, ']']);
             end

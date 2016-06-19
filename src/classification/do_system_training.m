@@ -58,7 +58,7 @@ else
     transformation = 'identity';
 end
 
-if ~strcmp(classifier_method, 'gmm')
+if ~any(strcmp(classifier_method, {'gmm', 'liblinear'}))
     error(['Unknown classifier method [', classifier_method, ']']);
 end
 
@@ -135,13 +135,13 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
 
         end
 
-        % Train models for each class
-        label_id = 1;
-        for label=data.keys
-            progress(0, 'Train models', ...
-                (label_id / length(data.keys)), char(label), fold);
+        if strcmp(classifier_method, 'gmm')
+            % Train models for each class
+            label_id = 1;
+            for label=data.keys
+                progress(0, 'Train models', ...
+                    (label_id / length(data.keys)), char(label), fold);
 
-            if strcmp(classifier_method, 'gmm')
                 gmm = struct();
                 [gmm.mu, gmm.Sigma, gmm.w , gmm.avglogl, ...
                     gmm.f, gmm.normlogl, gmm.avglogl_iter] = ...
@@ -149,11 +149,53 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                     classifier_params.n_iter+classifier_params.min_covar, ...
                     classifier_params.n_components, 'hf');
                 model_container.models(char(label)) = gmm;
-            else
-               error(['Unknown classifier method ', ...
-                   classifier_method, ']']);                
+                label_id = label_id + 1;
             end
-            label_id = label_id + 1;
+        elseif strcmp(classifier_method, 'liblinear')
+            % LIBLINEAR training module
+            % TODO: Allow cross-validation of C
+            % TODO: Allow reweighting based on class size
+
+            all_data = data.values;
+            scene_instance_ct = cellfun(@(x)(size(x, 2)), all_data);
+            label_vec = arrayfun(@(k)(k*ones(scene_instance_ct(k), 1)), ...
+                1:numel(all_data), ...
+                'uniformoutput', false);
+            label_vec = cat(1, label_vec{:});
+            instance_mat = cat(2, all_data{:})';
+
+            options = '-q';
+
+            if isfield(classifier_params, 'type')
+                options = sprintf('%s -s %d', options, classifier_params.type);
+            end
+
+            if isfield(classifier_params, 'C')
+                options = sprintf('%s -c %f', options, classifier_params.C);
+            end
+
+            if isfield(classifier_params, 'loss_epsilon')
+                options = sprintf('%s -p %f', options, classifier_params.loss_epsilon);
+            end
+
+            if isfield(classifier_params, 'termination_epsilon')
+                options = sprintf('%s -e %f', options, classifier_params.termination_epsilon);
+            end
+
+            if isfield(classifier_params, 'bias')
+                options = sprintf('%s -B %f', options, classifier_params.bias);
+            end
+
+            model = train(label_vec, sparse(instance_mat), options);
+
+            all_models = struct();
+            all_models.classes = data.keys;
+            all_models.liblinear_model = model;
+
+            model_container.models('all') = all_models;
+        else
+           error(['Unknown classifier method ', ...
+               classifier_method, ']']);
         end
 
         % Save models
