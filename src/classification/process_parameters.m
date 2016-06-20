@@ -67,8 +67,13 @@ if ~isfield(params.flow, 'feature_transformation')
     params.flow.feature_transformation = false;
 end
 
+modeling_params = struct();
+modeling_params.selection = params.selection;
+modeling_params.transform = params.transform;
+modeling_params.classifier = params.classifier;
+
 params.features.hash = get_parameter_hash(params.features);
-params.classifier.hash = get_parameter_hash(params.classifier);
+params.classifier.hash = get_parameter_hash(modeling_params);
 
 params.path.features = fullfile(params.path.base, ...
     params.path.features, params.features.hash);
@@ -80,9 +85,11 @@ params.path.results = fullfile(params.path.base, ...
     params.path.results, params.features.hash, params.classifier.hash);
 
 params.path.feature_selectors = fullfile(params.path.base, ...
-    params.path.feature_selectors, params.features.hash);
+    params.path.feature_selectors, params.features.hash, ...
+    params.classifier.hash);
 params.path.feature_transforms = fullfile(params.path.base, ...
-    params.path.feature_transforms, params.features.hash);
+    params.path.feature_transforms, params.features.hash, ...
+    params.classifier.hash);
 
 
 end
