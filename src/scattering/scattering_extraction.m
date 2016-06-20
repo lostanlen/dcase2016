@@ -40,12 +40,12 @@ for layer = 1:nLayers
     else
         Y{layer} = U(1+previous_layer);
     end
-    
+
     % Apply nonlinearity to last sub-layer Y to get layer U
-    if isfield(arch, 'nonlinearity') 
+    if isfield(arch, 'nonlinearity')
         U{1+layer} = Y_to_U(Y{layer}{end}, arch.nonlinearity);
     end
-    
+
     % Blur/pool first layer Y to get layer S
     if isfield(arch, 'invariants')
         S{1+previous_layer} = Y_to_S(Y{layer}, arch);
@@ -58,9 +58,10 @@ S1 = reshape(S1, size(S1, 1) * nChunks, nAzimuths, size(S1, 3));
 S1 = permute(S1, [3, 1, 4, 2]);
 
 %%
+[nLambda1s, nFrames, ~] = size(S1);
 if iscell(S{1+2})
+
 else
-    [nLambda1s, nFrames, ~] = size(S1);
     nLambda2s = length(S{1+2}.data);
     scattergram = cat(3, S1, zeros(nLambda1s, nFrames, nLambda2s, nAzimuths));
     feat = S1(:, :, 1, floor(end/2));
@@ -92,4 +93,3 @@ features = struct( ...
     'scattergram_stat', scattergram_stat);
 
 end
-
