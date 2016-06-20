@@ -39,7 +39,7 @@ path:
 # ==========================================================
 selection:
   criterion: energy
-  epsilon: 0.05
+  epsilon: 0            # Select all coefficients
 
 # ==========================================================
 # Feature transform
