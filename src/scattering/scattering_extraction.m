@@ -63,7 +63,7 @@ if iscell(S{1+2})
     nPsi_gamma2s = length(S{1+2}{1,1}.data);
     feat = S1(:, :, 1, floor(end/2));
     for gamma2_index = 1:nPsi_gamma2s
-        nGammagammas = length(S{1+2}{1}.data{lambda2_index};
+        nGammagammas = length(S{1+2}{1}.data{lambda2_index});
         for gammagamma_index = 1:nGammagammas
             band = S{1+2}.data{gamma2_index}{gammagamma_index}( ...
                 (1+end/4):(3*end/4), :, :, :);
