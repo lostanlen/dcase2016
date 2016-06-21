@@ -79,7 +79,7 @@ if iscell(S{1+2})
         band = reshape(band, size(band, 1) * nChunks, nAzimuths, ...
             size(band, 3));
         band = permute(band, [3, 1, 4, 2]);
-        feat = cat(1, feat, band(:, :, floor((1+end)/2));
+        feat = cat(1, feat, band(:, :, floor((1+end)/2)));
     end
 else
     nLambda2s = length(S{1+2}.data);
