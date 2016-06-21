@@ -70,7 +70,7 @@ if iscell(S{1+2})
             band = reshape(band, size(band, 1) * nChunks, nAzimuths, ...
                 size(band, 3) * size(band, 4));
             band = permute(band, [3, 1, 4, 2]);
-            feat = cat(1, feat, band(:, :, floor(end/2)));
+            feat = cat(1, feat, band(:, :, floor((1+end)/2)));
         end
     end
     nPhi_gamma2s = length(S{1+2}{1,2}.data);
@@ -79,7 +79,7 @@ if iscell(S{1+2})
         band = reshape(band, size(band, 1) * nChunks, nAzimuths, ...
             size(band, 3));
         band = permute(band, [3, 1, 4, 2]);
-        feat = cat(1, feat, band(:, :, floor(end/2));
+        feat = cat(1, feat, band(:, :, floor((1+end)/2));
     end
 else
     nLambda2s = length(S{1+2}.data);
@@ -89,7 +89,7 @@ else
         band = S{1+2}.data{lambda2_index}((1+end/4):(3*end/4), :, :);
         band = reshape(band, size(band, 1) * nChunks, nAzimuths, size(band, 3));
         band = permute(band, [3, 1, 4, 2]);
-        feat = cat(1, feat, band(:, :, floor(end/2)));
+        feat = cat(1, feat, band(:, :, floor((1+end)/2)));
         scattergram(1:size(band,1), :, end + 1 - lambda2_index, :) = band;
     end
 end
