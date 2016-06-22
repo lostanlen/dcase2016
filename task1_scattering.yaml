@@ -71,6 +71,7 @@ features:
 classifier:
   method: liblinear
   parameters: !!null            # Parameters are copied from classifier.parameters based on defined method
+  binaural_augmentation: examples # can be either "examples" or "features"
 
 classifier_parameters:
   liblinear:
