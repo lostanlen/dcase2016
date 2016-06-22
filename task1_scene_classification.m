@@ -6,7 +6,7 @@ add_paths();   % Add file paths
 rng(123456); % let's make randomization predictable
 
 parser = inputParser;
-parser.addOptional('mode', 'development', @isstr);
+parser.addOptional('mode', 'challenge', @isstr);
 parser.addOptional('yaml_path', 'task1_scattering.yaml', @isstr);
 %parser.addOptional('yaml_path', 'task1_baseline.yaml', @isstr);
 parse(parser, varargin{:});
@@ -53,7 +53,7 @@ end
 % ==================================================
 if params.flow.extract_features
     section_header('Feature extraction');
-    
+
     % Collect files in train sets
     files = [];
     for fold = dataset.folds(dataset_evaluation_mode)
@@ -73,14 +73,14 @@ if params.flow.extract_features
         end
     end
     files = sort(files);
-    
+
     % Go through files and make sure all features are extracted
     do_feature_extraction(files, ...
         dataset, ...
         params.path.features, ...
         params.features, ...
         params.general.overwrite);
-    
+
     foot();
 end
 
@@ -122,7 +122,7 @@ if params.flow.train_system
     do_system_training(dataset, model_path, feature_normalizer_path, ...
         feature_path, params, classifier_params, dataset_evaluation_mode, ...
         classifier_method, overwrite);
-    
+
     foot();
 end
 
@@ -138,7 +138,7 @@ if(args.development && ~args.challenge)
         feature_params = params.features;
         classifier_method = params.classifier.method;
         overwrite = params.general.overwrite;
-        
+
         do_system_testing(dataset,...
             feature_path, ...
             result_path, ...
@@ -150,16 +150,16 @@ if(args.development && ~args.challenge)
             overwrite);
         foot();
     end
-    
+
     % System evaluation
     % ==================================================
     if params.flow.evaluate_system
         section_header('System evaluation');
-        
+
         do_system_evaluation(dataset,...
             params.path.results,...
             dataset_evaluation_mode);
-        
+
         foot();
     end
     % System evaluation with challenge data
@@ -170,15 +170,15 @@ elseif(~args.development && args.challenge)
     else
         error(['Unknown development dataset [', params.general.evaluation_dataset, ']']);
     end
-    
+
     if params.flow.initialize
         challenge_dataset.fetch();
     end
-    
+
     % System testing
     if params.flow.test_system
         section_header('System testing     [Challenge data]');
-        
+
         do_system_testing(challenge_dataset,...
             params.path.features,...
             params.path.challenge_results,...
@@ -189,7 +189,7 @@ elseif(~args.development && args.challenge)
             params.classifier.method,...
             1);
         foot();
-        
+
         disp(' ');
         disp(['Your results for the challenge data are stored at [',params.path.challenge_results,']']);
         disp(' ');

@@ -62,8 +62,8 @@ features:
     J1: 11
     Q2_time: 1
     J2_time: 15
-    Q2_freq: 1
-    J2_freq: 4
+    #Q2_freq: 1
+    #J2_freq: 4
 
 # ==========================================================
 # Classifier
