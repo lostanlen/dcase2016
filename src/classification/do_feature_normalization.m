@@ -59,6 +59,12 @@ parfor fold = dataset.folds(dataset_evaluation_mode)
                 feature_data = ...
                     load_data(get_feature_filename(item.file, feature_path));
                 feature_data = feature_data.stat;
+                if size(feature_data.mean, 3) > 1
+                    feature_data.mean = ...
+                        feature_data.mean(:, :, floor((1+end)/2));
+                    feature_data.std = feature_data.std(:, :, floor((1+end)/2));
+                    feature_data.S1 = feature_data.S1(:, :, floor((1+end)/2));
+                    feature_data.S2 = feature_data.S2(:, :, floor((1+end)/2));
             else
                 error(['Features not found [', item.file, ']']);
             end
