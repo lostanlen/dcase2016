@@ -81,6 +81,7 @@ if iscell(S{1+2})
         band = permute(band, [3, 1, 4, 2]);
         feat = cat(1, feat, band);
     end
+    scattergram = [];
 else
     nLambda2s = length(S{1+2}.data);
     scattergram = cat(3, S1, zeros(nLambda1s, nFrames, nLambda2s, nAzimuths));
