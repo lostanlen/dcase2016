@@ -113,7 +113,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             
             % Select features
             if feature_selection
-                feature_data = feature_data(feature_selector.indices, :);
+                feature_data = feature_data(feature_selector.indices, :, :);
             end
             
             % Transform features
@@ -160,7 +160,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             scene_instance_ct = cellfun(@(x)(size(x, 2)), all_data);
             label_vec = arrayfun(@(k)(k*ones(scene_instance_ct(k), 1)), ...
                 1:numel(all_data), ...
-                'uniformoutput', false);
+                'UniformOutput', false);
             label_vec = cat(1, label_vec{:});
             instance_mat = cat(2, all_data{:})';
 
