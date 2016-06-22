@@ -54,7 +54,7 @@ features:
   fs: 44100
   win_length_seconds: 0.743
   hop_length_seconds: 0.186
-  binaural_augmentation: true
+  binaural_augmentation: false
   n_azimuths: 5
 
   scattering:
