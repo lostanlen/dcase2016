@@ -73,17 +73,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                 feature_normalizer_filename, ']']);
         end
 
-        % Load selector
-        if feature_selection
-            feature_selector_filename = ...
-                get_feature_selector_filename(fold, feature_selector_path);
-            feature_selector = load_data(feature_selector_filename);
-            normalizer.mean = normalizer.mean(feature_selector.indices);
-            normalizer.S1 = normalizer.S1(feature_selector.indices);
-            normalizer.S2 = normalizer.S2(feature_selector.indices);
-            normalizer.std = normalizer.std(feature_selector.indices);
-        end
-        
         % Initialize model container
         model_container = struct('normalizer', normalizer, ...
             'models', containers.Map() );
