@@ -154,9 +154,14 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
         elseif strcmp(classifier_method, 'liblinear')
             % LIBLINEAR training module
             % TODO: Allow cross-validation of C
-            % TODO: Allow reweighting based on class size
+            % all_data is a three-way tensor whose dimensions correspond
+            % to features, samples, and azimuths.
 
             all_data = data.values;
+            if size(all_data{1}, 3) > 1
+                all_data = cellfun(@(x) reshape(x, size(x, 1), ...
+                    size(x, 2) * size(x, 3)), all_data, 'UniformOutput', false);
+            end
             scene_instance_ct = cellfun(@(x)(size(x, 2)), all_data);
             label_vec = arrayfun(@(k)(k*ones(scene_instance_ct(k), 1)), ...
                 1:numel(all_data), ...
