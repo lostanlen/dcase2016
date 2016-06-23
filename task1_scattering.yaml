@@ -4,7 +4,7 @@
 flow:
   initialize: true
   extract_features: true
-  feature_selection: true
+  feature_selection: false
   feature_transform: true
   feature_normalizer: true
   train_system: true
