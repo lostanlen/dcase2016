@@ -60,7 +60,7 @@ end
 % Check that target path exists, create if not
 check_path(model_path);
 progress(1, 'Collecting data', 0, '');
-parfor fold=dataset.folds(dataset_evaluation_mode)        
+for fold=dataset.folds(dataset_evaluation_mode)        
     current_model_file = get_model_filename(fold, model_path);
     if or(~exist(current_model_file, 'file'), overwrite)
         % Load normalizer
