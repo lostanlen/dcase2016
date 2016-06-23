@@ -47,11 +47,6 @@ function do_system_training(dataset, model_path, feature_normalizer_path, ...
 %     Feature file not found.
 %
 
-feature_selection = params.flow.feature_selection;
-if feature_selection
-    feature_selector_path = params.path.feature_selectors;
-end
-
 if isfield(params, 'transform')
     transformation = params.transform;
 else
@@ -109,11 +104,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                 feature_data = feature_data.feat;
             else
                 error(['Features not found [', item.file, ']']);
-            end
-            
-            % Select features
-            if feature_selection
-                feature_data = feature_data(feature_selector.indices, :, :);
             end
             
             % Transform features
