@@ -115,8 +115,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
 
             % Concatenate azimuths
             if ~ismatrix(feature_data)
-                feature_data = reshape(feature_data, size(feature_data, 1), ...
-                    size(feature_data, 2) * size(feature_data, 3));
+                feature_data = feature_data(:, :, floor(1+(end/2)));
             end
             
             % Do classification for the block
