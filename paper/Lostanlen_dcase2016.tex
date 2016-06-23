@@ -272,10 +272,7 @@
 
 
 \begin{document}
-\title{
-Binaural Scene Classification \\
-with Time-Frequency Scattering \\
-and Deep Convolutional Networks}
+\title{Auditory Scene Classification with Wavelet Scattering}
 
 % author names and affiliations
 % use a multiple column layout for up to three different
@@ -292,166 +289,18 @@ The source code to reproduce figures and experiments is freely available at
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-The abstract goes here.
+This technical report describes our participation to the scene classificationtask of the 2016 edition of the IEEE AASP Challenge for Detection and Classificationof Acoustic Scenes and Events (DCASE).
+We perform a Gammatone scattering transform over the 
 \end{abstract}
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
+Scattering transforms are translation-invariant representations of audio signals which cascade an auditory filterbank and a modulation filterbank, interspersed with complex modulus nonlinearities.
 
-Fine-grained classification of acoustic scenes is only made
-possible by integrating signal information over a long temporal context.
-Whereas a few seconds are often sufficient to recognize a speaker,
-a musical instrument, or a genre, it may require up to 30 seconds
-to disambiguate closely related acoustic scenes.
-% Assumption of stationarity
-% Long-range dependencies
-% A challenge in temporal integration
 
-%Our main contribution is to
+\section{Scattering transform}
+%We refer the reader to \
 
-% Contribution:
-% Online data augmentation to enforce invariance to binaural azimuth
-
-\section{Time-frequency scattering}
-Let $\boldsymbol{\psi}[t]$ an analytic band-pass filter of
-dimensionless frequency $1$ and bandwidth $1/Q$.
-A filter bank of wavelets is built by dilating $\boldsymbol{\psi}$
-according to a geometric sequence of scales $2^{-k_1/Q}$, where the
-log-frequency index $k_1$ takes integer values.
-We denote by $\boldsymbol{\psi_{k_1}}[t]$ the resulting wavelets.
-In all subsequent experiments,
-$\boldsymbol{\psi}$ is designed as a Gammatone
-wavelet of quality factor $Q = 4$, so as to approximate the properties of
-the human cochlea.
-The wavelet transform $\boldsymbol{}$ of an audio signal
-$\boldsymbol{x}[t]$ is obtained by convolution with all wavelets:
-$\boldsymbol{y_1}[t, k_1] =
-(\boldsymbol{x} \overset{t}{\ast} \boldsymbol{\psi_{k_1}})[t]$.
-Applying pointwise complex modulus to $\boldsymbol{y_1}$ yields
-the wavelet scalogram
-$\boldsymbol{x_1}[t, k_1]
-= \vert \boldsymbol{y_1}[t, k_1] \vert$,
-also called constant-$Q$ transform (CQT),
-indexed by time $t$ and log-frequency $k_1$.
-
-Time-frequency scattering consists in convolving
-$\boldsymbol{x_2}[t, k_1]$
-with a family of two-dimensional wavelets
-$\boldsymbol{\Psi_{k_2}}[t, k_1]$, where the index
-$k_2$ encapsulates two values, \ie
-a temporal scale $\alpha$ and a
-log-frequential scale $\beta$.
-The temporal scale $\alpha$ takes $5$ values between
-$23\,\mathrm{ms}$ and $370\,\mathrm{ms}$ according
-to a geometric sequence.
-The log-frequential scale $\beta$ takes $5$ values
-between $1/4^{\mathrm{th}}$ of an octave and
-$4$ octaves, as well as their $5$ "mirror" frequencies,
-according to a geometric sequence.
-In addition, the edge case $\beta = \infty$ corresponds
-to a log-frequential low-pass filter along $4$ octaves
-according to all $5$ temporal scales $\alpha$.
-Finally, the edge case $(\alpha, \beta) = (\infty, 0)$
-coresponds to a temporal moving average
-$\boldsymbol{\phi}[t]$
-along $370\,\mathrm{ms}$ without any transformation of
-the log-frequency axis.
-In sum, there are
-$5 \times 5 \times 2 + 5 + 1 = 56$
-time-frequency scattering features for every time $t$
-and log-frequency $k_1$.
-
-The time-frequency scattering coefficients are thus
-defined as
-\begin{IEEEeqnarray}{rCl}
-\boldsymbol{y_2}[t, k_1, k_2]
-& = &
-\left( \boldsymbol{x_1} \right. \! \overset{t,k_1}{\ast} \!
-\left. \boldsymbol{\Psi_{k_2}} \right) [t, k_1]
-\nonumber \\
-& = &
-\sum_{\tau, \kappa_1}
-\boldsymbol{x_1}[t - \tau, k_1 - \kappa_1]
-\boldsymbol{\Psi_{k_2}}[\tau, \kappa_1].
-\end{IEEEeqnarray}
-
-For some index $k_2$ involving a temporal scale $\alpha$,
-applying pointwise complex modulus to
-$\boldsymbol{y_2}[t, k_1, k_2]$ provides
-translation-invariant coefficients as long as the amount
-of translation does not exceed $\alpha$.
-To increase the amount of invariance to translation,
-we apply the low-pass filter $\boldsymbol{\phi}[t]$
-to the moduli, hence bringing all coefficients to the same
-sample rate.
-\begin{equation}
-\boldsymbol{x_2}[t,k_1,k_2] =
-\vert \boldsymbol{y_2}[t, k_1, k_2 ] \vert
-\overset{t}{\ast}
-\boldsymbol{\phi}[t]
-\end{equation}
-
-% Fig. 1, (a), (b), (c), (d).
-% Show time-frequency scattering coefficients for various
-% values of (\alpha, \beta), including the two edge cases.
-
-% Fig. 2 (a), (b), (c), (d).
-% Tme-frequency scattering coefficeints.
-
-% Characterization of stationary processes
-% Re-synthesis from a time-invariant representation
-
-\section{Deep Convolutional Networks}
-Each layer in a convolutional network typically consists in the
-composition of three operations: two-dimensional convolutions,
-application of a pointwise nonlinearity, and local pooling.
-\begin{IEEEeqnarray}{rCl}
-\IEEEeqnarraymulticol{3}{l}{
-\boldsymbol{y_3}[t,k_1,k_3]} \nonumber \\
-& = &
-\sum_{k_2}
-\boldsymbol{b_3}[k_2, k_3]
-+ \mathbf{W_3}[t, k_1, k_2, k_3]
-\overset{t,k_1}{\ast}
-\boldsymbol{x_2}[t,k_1,k_2].
-\IEEEeqnarraynumspace
-\end{IEEEeqnarray}
-We apply the rectified linear unit (ReLU) nonlinearity,
-with a rectifying slope of $\nu=0.3$ for negative inputs.
-\begin{IEEEeqnarray}{l}
-\boldsymbol{y_{3}^{+}}[t,k_{1},k_{3}]=\left\{ \! \! \! \begin{array}{r}
-\nu\,\boldsymbol{y_{3}}[t,k_{1},k_{3}] \;\;\; \mbox{if} \;\; \boldsymbol{y_{3}}[t,k_{1},k_{3}]<0\\
-\boldsymbol{y_{3}}[t,k_{1},k_{3}] \;\;\; \mbox{if} \;\; \boldsymbol{y_{3}}[t,k_{1},k_{3}]\geq0
-\end{array}\right. \!
-\IEEEeqnarraynumspace
-\label{eq:relu}
- \end{IEEEeqnarray}
-At the pooling step, we retain the maximal activation among neighboring units in the
-time-frequency domain $(t, k_1)$ over non-overlapping rectangles of width $\Delta t$ and
-height $\Delta k_1$.
-\begin{equation}
-\boldsymbol{x_3}[t,k_1,k_3] = \! \!
-\max_{
-\substack{
-0 \leq \tau < \Delta t \\
-0 \leq \kappa_1 < \Delta k_1}
-} \! \!
-\left\{
-\boldsymbol{y_{3}^{+}}[t - \tau, k_1 - \kappa_1, k_3]
-\right\}
-\label{eq:pooling}
-\end{equation}
-The hidden units in $\boldsymbol{x_3}$ are in turn fed to a second layer of convolutions,
-ReLU, and pooling.
-
-Data augmentation is a simple, yet effective, way to enforce invariance in feature learning
-is to 
-\begin{equation}
-\boldsymbol{x}[t] =
-r \times \boldsymbol{x^{\mathsf{L}}}[t]
-+ (1-r) \times \boldsymbol{x^{\mathsf{R}}}[t],
-\end{equation}
-where $r$ is drawn uniformly at random in the interval $[0, 1]$.
 
 \section{Conclusion}
 The conclusion goes here.
