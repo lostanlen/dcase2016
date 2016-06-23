@@ -43,11 +43,6 @@ function do_system_testing(dataset, feature_path, result_path, model_path, ...
 %     Audio file not found.
 % 
 
-feature_selection = params.flow.feature_selection;
-if feature_selection
-    feature_selector_path = params.path.feature_selectors;
-end
-
 if isfield(params, 'transform')
     transformation = params.transform;
 else
@@ -76,13 +71,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             error(['Model file not found [', model_filename, ']']);
         end
         
-        % Load selector
-        if feature_selection
-            feature_selector_filename = ...
-                get_feature_selector_filename(fold, feature_selector_path);
-            feature_selector = load_data(feature_selector_filename);
-        end
-
         test_items = dataset.test(fold);
 
         for item_id=1:length(test_items)
@@ -115,11 +103,6 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
                   'acceleration_params', feature_params.mfcc_acceleration);
                 feature_data = feature_data.feat;
 
-            end
-
-            % Select features
-            if feature_selection
-                feature_data = feature_data(feature_selector.indices, :);
             end
             
             % Transform features
