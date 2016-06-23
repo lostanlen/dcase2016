@@ -113,6 +113,12 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             % Normalize features
             feature_data = model_container.normalizer.normalize(feature_data);
 
+            % Concatenate azimuths
+            if ~ismatrix(feature_data)
+                feature_data = reshape(feature_data, size(feature_data, 1), ...
+                    size(feature_data, 2) * size(feature_data, 3));
+            end
+            
             % Do classification for the block
             if strcmp(classifier_method, 'gmm')
                 current_result = ...
