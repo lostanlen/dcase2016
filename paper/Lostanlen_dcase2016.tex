@@ -291,9 +291,7 @@ The source code to reproduce figures and experiments is freely available at
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-This technical report describes our participation to the scene classificationtask of the 2016 edition of the IEEE AASP Challenge for Detection and Classificationof Acoustic Scenes and Events (DCASE).
-Our computational pipeline consists of a Gammatone scattering transform, local averaging to a time scale of 740 ms, logarithmic compression, and frame-based classification with a linear support vector machine (SVM). At test time, decisions are aggregated over the duration of the full auditory scene by majority voting.
-We propose a novel data augmentation technique, by mixing the left and right stereophonic channels in varying proportions, in order to enforce invariance to azimuthal orientation of the binaural recording system.
+This technical report describes our contribution to the scene classification task of the 2016 IEEE AASP Challenge for Detection and Classification of Acoustic Scenes and Events (DCASE). Our computational pipeline consists of a Gammatone scattering transform, averaged at a time scale of 740 ms with logarithmic compression and frame-based classification using a linear support vector machine (SVM). At test time, decisions are aggregated over the whole recording by majority voting. We propose a novel data augmentation technique, where we mix the left and right channels in varying proportions in order to enforce invariance to azimuthal orientation of the binaural recording system.
 \end{abstract}
 \IEEEpeerreviewmaketitle
 
