@@ -57,11 +57,11 @@
 \begin{sloppy}
 
 \begin{abstract}
-This technical report describes our contribution to the scene classification task of the 2016 IEEE AASP Challenge for Detection and Classification of Acoustic Scenes and Events (DCASE). Our computational pipeline consists of a Gammatone scattering transform, averaged at a time scale of 740 ms with logarithmic compression and frame-based classification using a linear support vector machine (SVM). At test time, decisions are aggregated over the whole recording by majority voting. We propose a novel data augmentation technique, where we mix the left and right channels in varying proportions in order to enforce invariance to azimuthal orientation of the binaural recording system.
+This technical report describes our contribution to the scene classification task of the 2016 edition of the IEEE AASP Challenge for Detection and Classification of Acoustic Scenes and Events (DCASE). Our computational pipeline consists of a gammatone scattering transform, logarithmically compressed and coupled with a per-frame linear support vector machine. At test time, frame-level labels are aggregated over the whole recording by majority vote. During the training phase, we propose a novel data augmentation technique, where left and right channels are mixed at different proportions to introduce invariance to sound direction in the training data.
 \end{abstract}
 
 \begin{keywords}
-One, two, three, four, five
+scattering transform, wavelets, auditory scene classification, orientation invariance, support vector machine
 \end{keywords}
 
 \section{System Outline}
