@@ -72,17 +72,22 @@ function do_system_evaluation(dataset, result_path, dataset_evaluation_mode)
     fprintf(['     %-20s | %-4s : %-4s | %-8s  |  |',fold_labels,'\n'], 'Scene label', 'Nref', 'Nsys', 'Accuracy');
     fprintf([separator,'\n']);
     labels = results.class_wise_accuracy.keys;
+    csv_output = '';
     for label_id=1:length(labels)
         fold_values = '';
+        csv_output = [csv_output sprintf('"%s", ', labels{label_id})];
         if dataset.fold_count() > 1
             for fold=dataset.folds(dataset_evaluation_mode)
                 fold_values = [fold_values, sprintf(' %5.1f %%  |', results_fold(fold).class_wise_accuracy(labels{label_id}) * 100)];
+                csv_output = [csv_output sprintf('%f, ', results_fold(fold).class_wise_accuracy(labels{label_id}))];
             end
         end
         values = sprintf('     %-20s | %4d : %4d | %5.1f %%   |  |', labels{label_id},...
                                                                      results.class_wise_data(labels{label_id}).Nref,...
                                                                      results.class_wise_data(labels{label_id}).Nsys,...
                                                                      results.class_wise_accuracy(labels{label_id})*100 );
+        csv_output = [csv_output sprintf('%f\n', results.class_wise_accuracy(labels{label_id}))];
+
         disp([values, fold_values]);
     end
     fprintf([separator,'\n']);
@@ -98,4 +103,8 @@ function do_system_evaluation(dataset, result_path, dataset_evaluation_mode)
                                                                  results.Nsys,...
                                                                  results.overall_accuracy * 100);
     disp([values, fold_values]);
+
+    f = fopen('evaluation.csv', 'w');
+    fwrite(f, csv_output);
+    fclose(f);
 end
