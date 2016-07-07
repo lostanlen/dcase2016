@@ -8,6 +8,9 @@
 \documentclass{article}
 \usepackage{dcase2016,amsmath,graphicx,url,times}
 \usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usetikzlibrary{arrows.meta}
 %\usepackage{dcase2016,amssymb,amsmath,graphicx,times,url}
 
 % Example definitions.
@@ -38,10 +41,10 @@
 % Two addresses
 % --------------------
 \twoauthors
-  {Vincent Lostanlen}
+  {Vincent Lostanlen\sthanks{This work is supported by the ERC InvariantClass grant 320959. The source code to reproduce figures and experiments is freely available at \protect\url{http://www.github.com/lostanlen/dcase2016}.}}
     {D\'{e}partement d'Informatique \\ \'{E}cole normale sup\'{e}rieure \\ Paris, France \\
      vincent.lostanlen@ens.fr}
-  {Joakim And\'{e}n\sthanks{This work is supported by the ERC InvariantClass grant 320959. The source code to reproduce figures and experiments is freely available at \protect\url{http://www.github.com/lostanlen/dcase2016}.}}
+  {Joakim And\'{e}n\footnotemark[1]}
     {Program in Applied and Computational Mathematics \\ Princeton University \\
      Princeton, NJ, USA \\
      janden@math.princeton.edu}
@@ -54,19 +57,53 @@
 \begin{sloppy}
 
 \begin{abstract}
-This technical report describes our contribution to the scene classification task of the 2016 IEEE AASP Challenge for Detection and Classification of Acoustic Scenes and Events (DCASE). Our computational pipeline consists of a Gammatone scattering transform, averaged at a time scale of 740 ms with logarithmic compression and frame-based classification using a linear support vector machine (SVM). At test time, decisions are aggregated over the whole recording by majority voting. We propose a novel data augmentation technique, where we mix the left and right channels in varying proportions in order to enforce invariance to azimuthal orientation of the binaural recording system.
+This technical report describes our contribution to the scene classification task of the 2016 edition of the IEEE AASP Challenge for Detection and Classification of Acoustic Scenes and Events (DCASE). Our computational pipeline consists of a gammatone scattering transform, logarithmically compressed and coupled with a per-frame linear support vector machine. At test time, frame-level labels are aggregated over the whole recording by majority vote. During the training phase, we propose a novel data augmentation technique, where left and right channels are mixed at different proportions to introduce invariance to sound direction in the training data.
 \end{abstract}
 
 \begin{keywords}
-One, two, three, four, five
+scattering transform, wavelets, auditory scene classification, orientation invariance, support vector machine
 \end{keywords}
 
 \section{System Outline}
 \label{sec:outline}
-
 The system used for the scene classification task is illustrated in Figure \ref{fig:outline}. Each recording is decomposed using a time scattering transform, which provides a signal representation that is locally invariant to time-shifting and stable to time-warping deformation. Since small changes in timing have little relevance to the auditory scene of a particular recording, this invariance reduces the variability of the data without necessarily hampering discriminability. The averaging scale of the scattering transform is fixed to be $740~\mathrm{ms}$. In order to account for the varying orders of magnitude across frequencies, we then apply a logarithmic compression to the data. Each recording is thus represented as a sequence of logarithmically compressed scattering vectors.
 
-At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
+Due to the stereophonic nature of the recordings, we augment the training data by constructing monophonic signals with different mixing proportions, effectively providing invariance to sound direction. At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\node (train heading) at (2, 6) {\textbf{Training Phase}};
+\draw (0.25, 5.75) -- (3.75, 5.75);
+\node (train data) at (2, 5.25) {Recording};
+\node[draw,rectangle] (train augment) at (2, 4.50) {Data Augmentation};
+\node[draw,rectangle] (train scatt) at (2, 3.75) {Log-Scattering};
+\node[draw,rectangle] (train svm) at (2, 3) {Train SVM};
+\draw[-{Latex}] (train data) -- (train augment);
+\draw[-{Latex}] (train augment) -- (train scatt);
+\draw[-{Latex}] (train scatt) -- (train svm);
+
+\node (test heading) at (6, 6) {\textbf{Testing Phase}};
+\draw (4.25, 5.75) -- (7.75, 5.75);
+\node (test data) at (6, 5.25) {Recording};
+\node[draw,rectangle] (test scatt) at (6, 3.75) {Log-Scattering};
+\node[draw,rectangle] (test svm) at (6, 3) {Test SVM};
+\node[draw,rectangle] (test vote) at (6, 2.25) {Voting};
+\node (test label) at (6, 1.5) {Label};
+\draw[-{Latex}] (test data) -- (test scatt);
+\draw[-{Latex}] (test scatt) -- (test svm);
+\draw[-{Latex}] (test svm) -- (test vote);
+\draw[-{Latex}] (test vote) -- (test label);
+
+\draw[dashed,-{Latex}] (train svm) -- (test svm);
+\end{tikzpicture}
+\end{center}
+\caption{
+\label{fig:outline}
+The scattering classification system proposed for the scene classification challenge. During the training phase, the data is augmented by mixing the left and right channels at various proportions. The log-scattering vectors are then computed and used to train a linear SVM. This SVM is then used to classify the sequence of log-scattering vectors for each test recording. The resulting sequence of labels is reduced to a single recording label through majority vote.
+}
+\end{figure}
+
 
 \section{Scattering Representation}
 \label{sec:scattering}
@@ -75,25 +112,37 @@ The scattering transform was introduced by S. Mallat as a signal representation 
 
 \begin{figure}
 \begin{center}
-\setlength{\unitlength}{1cm}
-\begin{picture}(5,2)
- \put(-1.5,0.0){\includegraphics[height=2cm,width=3.5cm]{gammatone_Q4.png}}
- \put(2.5,0.0){\includegraphics[height=2cm,width=3.5cm]{gammatone_Q1.png}}
-\end{picture}
+\begin{tikzpicture}
+\useasboundingbox[red] (-0.25, -0.5) rectangle (8.25, 2);
+\node (omlabel1) at (3.5, 1) {$\omega$};
+\draw[-{Latex[length=2mm]}] (0, 1) -- (omlabel1);
+\draw[-{Latex[length=2mm]}] (0, 1) -- (0, 2);
+\node[anchor=south west,inner sep=0] at (0, 0) {\includegraphics[height=2cm,width=3cm]{gammatone_Q4.png}};
+\node at (2, -0.25) {(a)};
+
+\node (omlabel2) at (8, 1) {$\omega$};
+\draw[-{Latex[length=2mm]}] (4.5, 1) -- (omlabel2);
+\draw[-{Latex[length=2mm]}] (4.5, 1) -- (4.5, 2);
+\node[anchor=south west,inner sep=0] at (4.5, 0) {\includegraphics[height=2cm,width=3cm]{gammatone_Q1.png}};
+\node at (6.5, -0.25) {(b)};
+\end{tikzpicture}
 \caption{
 \label{fig:gammatones}
-Left: Gammatone wavelet $\boldsymbol{\psi_{\gamma_1}}(t)$ with a quality factor of $Q=4$.
-Right: Gammatone wavelet $\boldsymbol{\psi_{\gamma_2}}(t)$ with a quality factor of $Q=1$.
-Blue and red oscillations represent the real and imaginary parts. The orange envelope represents
-the complex modulus.}
+Fourier transforms $\widehat{\psi}(\omega)$ of Gammatone mother wavelets with quality factors (a) $Q = 4$ and (b) $Q = 1$. Blue and red oscillations represent the real and imaginary parts. The orange envelope represents the complex modulus. Note that the Fourier transforms are zero in the negative frequencies.}
 \end{center}
 \end{figure}
 
-We define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating a mother wavelet $\psi$ according to
+First, for a signal $x$, let us define its Fourier transform $\widehat{x}$ by
+\begin{equation}
+	\widehat{x}(\omega) = \int_{\mathbb{R}} x(u) e^{-i\omega u}\,du.
+\end{equation}
+Given an analytic filter $\psi$ with Fourier transform $\widehat{\psi}$ concentrated around the dimensionless frequency $1$, we define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating $\psi$, called the mother wavelet, to obtain
 \begin{equation}
 	\psi_\lambda(t) = \lambda \psi(\lambda t).
 \end{equation}
-The mother wavelet $\psi$ is assumed to be analytic, that is with a zero Fourier transform for negative frequencies. In addition, we scale the Fourier transform of $\psi$ to be centered around the dimensionless frequency $1$. Consequently, $\psi_\lambda$ is centered at the frequency $\lambda$. A function $\psi$ that fulfills these criteria is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
+The analyticity of $\psi$ forces its Fourier transform to be zero for negative frequencies. The wavelet filters $\psi_\lambda$ are also analytic and since $\widehat{\psi}$ is centered around frequency $1$, $\widehat{\psi}_\la$ is centered around $\lambda$.
+
+A function $\psi$ that fulfills our conditions is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
 \begin{equation}
 	\psi(t) = ((n-1)t^{n-2}+ i t^{n-1})e^{-(b + i) t}\, 1_{[0,\infty)}(t),
 \end{equation}
@@ -103,13 +152,12 @@ Given a signal $x$, we decompose it using the wavelet filter bank to obtain
 \begin{equation}
 	x \ast \psi_\lau(t) \quad \mathrm{for~}\lau>0,
 \end{equation}
-known as the wavelet decomposition of $x$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
+known as the wavelet decomposition of $x$. We have denoted the standard convolution operator by $\ast$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
 
 The wavelet decomposition itself is very sensitive to time-shifting and time-warping, which can be reduced by taking the complex modulus. The result is known as the wavelet scalogram and we denote it by
 \begin{equation}
 	x_1(t, \log \lau) = | x \ast \psi_\lau(t) |.
 \end{equation}
-A sample scalogram is given in Figure \ref{fig:scalogram}.
 
 The scalogram provides a useful representation of the time-frequency content of a signal. At a given point $(t, \log \lau)$, it gives the intensity of $x$ at time $t$ and log-frequency $\log \lau_1$. However, it does not have the desired invariance and stability properties. To achieve this, we average the scalogram in time using a lowpass filter $\phi_T(t)$ of duration $T$ to give
 \begin{align}
@@ -169,26 +217,23 @@ In addition, we diagonally standardize the coefficients to have mean zero and un
 \section{Data Augmentation}
 \label{sec:augment}
 
-Most acoustic scene datasets are recorded according to a binaural protocol, i.e. with a pair of in-ear microphones \cite{Wang2006}.
-This protocol provides a realistic description of the spatial auditory environment, as it reproduces the natural listening conditions of humans.
-In particular, the interaural level difference (ILD) between left and right channel conveys the approximate azimuth of each sound source that make up the scene with respect to the listener \cite{Blauert2003}.
-Yet, since the location of the recordist varies across instances of the same class, the feature space for classification should be invariant to these azimuths.
+Most acoustic scene datasets are recorded according to a binaural protocol, i.e. with a pair of in-ear microphones \cite{Wang2006}. This protocol provides a realistic description of the spatial auditory environment, as it reproduces the natural listening conditions of humans. In particular, the interaural level difference (ILD) between the left and right channels depends on the direction of each sound source that make up the scene with respect to the listener \cite{Blauert2004}. Yet, since the microphone location and direction vary across instances of the same class, the signal representation should be invariant to these parameters.
 
-In order to achieve invariance to ILD, averaging the left and right channels into a monophonic signal is by far the most widespread approach.
-However, it favors the center of the scene while attenuating lateral cues.
-Moreover, sources that are on distinct azimuths get mixed, which may cause bias at training time.
-
-Instead, so as to leverage stereophonic data, we perform multiple combinations of the left channel $\boldsymbol{x_{\mathsf{L}}}(t)$ and right channel $\boldsymbol{x_{\mathsf{R}}}(t)$ into monophonic signals $\boldsymbol{x_{\alpha}}(t)$ according to the equation
+In order to achieve invariance to changes in direction, averaging the left and right channels into a monophonic signal is by far the most widespread approach.  If these are denoted by $x_{\mathsf{L}}$ and $x_{\mathsf{R}}$, respectively, we would thus have
 \begin{equation}
-\boldsymbol{x_{\alpha}}(t) =
-\dfrac{1+\alpha}{2} \boldsymbol{x_\mathsf{L}}(t) +
-\dfrac{1-\alpha}{2} \boldsymbol{x_\mathsf{R}}(t),
+	x_{\mathsf{M}}(t) = \frac{1}{2} x_{\mathsf{L}}(t) + \frac{1}{2} x_{\mathsf{R}}(t),
 \end{equation}
-where $\alpha$ is a panoramic mixing weight, taking values between $-1$ and $+1$, which could be deterministic or random.
+where $x_{\mathsf{M}}$ is the mixed signal. However, it favors the center of the scene while attenuating lateral cues. Indeed, if $x_{\mathsf{L}}$ is zero and $x_{\mathsf{R}}$ contains the entire signal, the resulting mixed signal $x_{\mathsf{M}}$ will have a lower amplitude.
 
-In following experiments, we deterministically set $\alpha$ to the values $-1$, $\frac{1}{2}$, $0$, $+\frac{1}{2}$, and $+1$.
-This is a form of data augmentation, because $5$ monophonic signals are derived from each binaural recording in the training set.
-At test time, only the center mix ($\alpha = 0$) is used to perform the class.
+To create the desired invariance without overemphasizing the central direction, we calculate multiple combinations of the left and right channels into the monophonic signal $x_{\alpha}$ using the formula
+\begin{equation}
+x_{\alpha}(t) =
+\dfrac{1+\alpha}{2} x_{\mathsf{L}}(t) +
+\dfrac{1-\alpha}{2} x_{\mathsf{R}}(t),
+\end{equation}
+where $\alpha$ determines the mixing between the channels. Note that taking $\alpha = 0$ gives us the center mixed signal $x_{\mathsf{M}}$ described above.
+
+In following experiments, we set $\alpha$ to $-1$, $\frac{1}{2}$, $0$, $+\frac{1}{2}$, and $+1$. This is a form of data augmentation since $5$ monophonic signals are obtained from each binaural recording in the training set, increasing its size. At test time, only the center combination ($\alpha = 0$) is used to classify the recording.
 
 \section{Classifier}
 \label{sec:classifier}
