@@ -295,12 +295,10 @@ This technical report describes our contribution to the scene classification tas
 \end{abstract}
 \IEEEpeerreviewmaketitle
 
-\section{Introduction}
-Invariance to translation is of paramount importance in auditory scene analysis.
-Indeed, the origin of time is chosen arbitrarily by the recordist, and thus do not convey any information about the class.
+\section{System outline}
+The system used for the scene classification task is illustrated in Figure \ref{fig:outline}. Each recording is decomposed using a time scattering transform, which provides a signal representation that is locally invariant to time-shifting and stable to time-warping deformation. Since small changes in timing have little relevance to the auditory scene of a particular recording, this invariance reduces the variability of the data without necessarily hampering discriminability. The averaging scale of the scattering transform is fixed to be $740~\mathrm{ms}$. In order to account for the varying orders of magnitude across frequencies, we then apply a logarithmic compression to the data. Each recording is thus represented as a sequence of logarithmically compressed scattering vectors.
 
-Scattering transforms are translation-invariant representations of audio signals which cascade an auditory filterbank and a modulation filterbank, interspersed with complex modulus nonlinearities.
-
+At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
 
 \section{Scattering transform}
 
