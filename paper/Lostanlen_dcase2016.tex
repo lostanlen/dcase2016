@@ -93,11 +93,11 @@ We define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating a mot
 \begin{equation}
 	\psi_\lambda(t) = \lambda \psi(\lambda t).
 \end{equation}
-The mother wavelet $\psi$ is assumed to be analytic, that is with a zero Fourier transform for negative frequencies. In addition, we will the Fourier transform of $\psi$ to be centered around $1$. Consequently, $\psi_\lambda$ is centered at the frequency $\lambda$. A function $\psi$ that fulfills these criteria is the analytic gamma wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
+The mother wavelet $\psi$ is assumed to be analytic, that is with a zero Fourier transform for negative frequencies. In addition, we scale the Fourier transform of $\psi$ to be centered around the dimensionless frequency $1$. Consequently, $\psi_\lambda$ is centered at the frequency $\lambda$. A function $\psi$ that fulfills these criteria is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
 \begin{equation}
-	\psi(t) = ???
+	\psi(t) = ((n-1)t^{n-2}+ i t^{n-1})e^{-(b + i) t}\, 1_{[0,\infty)}(t),
 \end{equation}
-We shall have use for wavelets of different quality factors $Q$. To begin with, we shall take $Q = 4$.
+where the bandwidth parameter $b$ is roughly proportional to $2^{-1/Q}$ and $Q$ is the desired quality factor, i.e. the ratio of the center frequency to the half-maximum bandwidth in the Fourier domain. To begin with, we shall take $Q = 4$.
 
 Given a signal $x$, we decompose it using the wavelet filter bank to obtain
 \begin{equation}
