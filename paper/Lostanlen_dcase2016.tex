@@ -188,56 +188,54 @@ To train the SVM, a cost parameter $C$ is used to determine the trade-off betwee
 
 Once the SVM is trained, we feed it log-scattering vectors from the testing set. As discussed in Section \ref{sec:post}, these are first standardized by the mean and variance derived from the training set. Again, a $30~\mathrm{s}$-recording in the testing set yields $80$ log-scattering vectors, which means that the SVM returns $80$ different class labels for a single recording. To obtain a label for the entire recording, we perform a majority vote among all the labels corresponding to the individual log-scattering vectors. This type of approach to aggregating representation vectors along a time series is known as a late integration scheme \cite{kittler}.
 
-\section{Discussion}
+\section{Numerical Results}
+
+To evaluate the time scattering system proposed above, we apply it to the development data provided with the DCASE 2016 scene classification challenge. This dataset is divided into four folds, which can be used to form train-test splits by training on three folds and testing on the remaining fold. This cross-validation procedure provides an estimate of the mean classification accuracy along with its variability due to differing training sets.
+
+The results for the entire system is provided in Table \ref{table:development-results}. It is to be noted that while performance is quite good for most classes, certain classes (\textsf{cafe/restaurant}, \textsf{residential area}, and \textsf{train}) perform very poorly. These scenes are relatively quiet, with few characteristic sounds present, which could explain the difficulty in classifying them well. The exact cause for this difference in performance merits further study. Despite these problems, the system provides a significant improvement over the baseline system, which consists of mel-frequency cepstral coefficients (MFCCs) modeled using Gaussian mixture models (GMMs) \cite{heittola}. Since the scattering representation takes into account the modulation structure of the scalogram in addition to the average spectral envelope captured by MFCCs, this improvement in performance is to be expected. We expect that further increases in performance can be achieved for this task by introducing more sophisticated extensions of the scattering transform such as the joint time-frequency scattering transform \cite{joint}.
 
 \begin{table}[!htbp]
 \centering
-\caption{
-Cross-validation results.
-\label{table:single-label-durations}}
-\begin{tabular}{llll}
+\begin{tabular}{lcc}
 \toprule
-Scene & Baseline & Temporal scattering & Temporal scattering \\
-           &               &  (1 azimuth)  & (5 azimuths) \\
+Scene & Baseline & Temporal scattering \\
 \midrule
-beach & 72.0 $\pm$ 19.0 & & 84.9 $\pm$ 11.7 \\
+beach & 72.0 $\pm$ 19.0 & 84.9 $\pm$ 11.7 \\
 
-bus & 62.0 $\pm$ 19.6 & & 91.3 $\pm$ 14.4 \\
+bus & 62.0 $\pm$ 19.6 & 91.3 $\pm$ 14.4 \\
 
-cafe/restaurant & 83.9 $\pm$ 12.1 & & 57.1 $\pm$ 20.5 \\
+cafe/restaurant & 83.9 $\pm$ 12.1 & 57.1 $\pm$ 20.5 \\
 
-car & 75.7 $\pm$ 17.7 & & 93.7 $\pm$  \phantom{0}6.3 \\
+car & 75.7 $\pm$ 17.7 & 93.7 $\pm$  \phantom{0}6.3 \\
 
-city center & 85.6 $\pm$ 18.5 & & 92.8 $\pm$  \phantom{0}8.9 \\
+city center & 85.6 $\pm$ 18.5 & 92.8 $\pm$  \phantom{0}8.9 \\
 
-forest path & 65.9 $\pm$ 26.5 & & 96.4 $\pm$  \phantom{0}7.2 \\
+forest path & 65.9 $\pm$ 26.5 & 96.4 $\pm$  \phantom{0}7.2 \\
 
-grocery store & 76.6 $\pm$ 22.3 & & 84.3 $\pm$ 15.6 \\
+grocery store & 76.6 $\pm$ 22.3 & 84.3 $\pm$ 15.6 \\
 
-home & 79.5 $\pm$ 18.6 & & 64.2 $\pm$ 26.3 \\
+home & 79.5 $\pm$ 18.6 & 64.2 $\pm$ 26.3 \\
 
-library & 61.3 $\pm$ 30.5 & & 81.1 $\pm$  \phantom{0}7.5 \\
+library & 61.3 $\pm$ 30.5 & 81.1 $\pm$  \phantom{0}7.5 \\
 
-metro station & 85.3 $\pm$ 18.0 & & 98.7 $\pm$  \phantom{0}2.7 \\
+metro station & 85.3 $\pm$ 18.0 & 98.7 $\pm$  \phantom{0}2.7 \\
 
-office & 91.1 $\pm$ \phantom{0}7.9 & & 86.1 $\pm$ 27.8 \\
+office & 91.1 $\pm$ \phantom{0}7.9 & 86.1 $\pm$ 27.8 \\
 
-park & 24.5 $\pm$ 15.6 & & 75.6 $\pm$ 10.5 \\
+park & 24.5 $\pm$ 15.6 & 75.6 $\pm$ 10.5 \\
 
-residential area & 75.4 $\pm$ 29.1 & & 55.8 $\pm$ 20.2 \\
+residential area & 75.4 $\pm$ 29.1 & 55.8 $\pm$ 20.2 \\
 
-train & 36.7 $\pm$ 10.8 & & 57.1 $\pm$ 15.3 \\
+train & 36.7 $\pm$ 10.8 & 57.1 $\pm$ 15.3 \\
 
-tram & 89.5 $\pm$ 17.5& & 86.4 $\pm$ 11.7 \\
+tram & 89.5 $\pm$ 17.5 & 86.4 $\pm$ 11.7 \\
 
 \bottomrule
 
-average & 71.3 $\pm$  \phantom{0}3.8 & & 80.4 $\pm$  \phantom{0}3.5
+average & 71.3 $\pm$  \phantom{0}3.8 & 80.4 $\pm$  \phantom{0}3.5
 \end{tabular}
+\caption{\label{table:development-results} Classification results obtained through cross-validation on the development data for the DCASE 2016 scene classification challenge. The mean and standard deviation of the percentage correct in each class is provided along with the average across classes.}
 \end{table}
-
-\section{Conclusion}
-This technical report presents 
 
 \bibliographystyle{IEEEtran}
 \bibliography{Lostanlen_dcase2016}
