@@ -8,6 +8,8 @@
 \documentclass{article}
 \usepackage{dcase2016,amsmath,graphicx,url,times}
 \usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 %\usepackage{dcase2016,amssymb,amsmath,graphicx,times,url}
 
 % Example definitions.
@@ -75,17 +77,23 @@ The scattering transform was introduced by S. Mallat as a signal representation 
 
 \begin{figure}
 \begin{center}
-\setlength{\unitlength}{1cm}
-\begin{picture}(5,2)
- \put(-1.5,0.0){\includegraphics[height=2cm,width=3.5cm]{gammatone_Q4.png}}
- \put(2.5,0.0){\includegraphics[height=2cm,width=3.5cm]{gammatone_Q1.png}}
-\end{picture}
+\begin{tikzpicture}
+\useasboundingbox[red] (-0.25, -0.5) rectangle (8.25, 2);
+\node (omlabel1) at (3.5, 1) {$\omega$};
+\draw[-{Latex[length=2mm]}] (0, 1) -- (omlabel1);
+\draw[-{Latex[length=2mm]}] (0, 1) -- (0, 2);
+\node[anchor=south west,inner sep=0] at (0, 0) {\includegraphics[height=2cm,width=3cm]{gammatone_Q4.png}};
+\node at (2, -0.25) {(a)};
+
+\node (omlabel2) at (8, 1) {$\omega$};
+\draw[-{Latex[length=2mm]}] (4.5, 1) -- (omlabel2);
+\draw[-{Latex[length=2mm]}] (4.5, 1) -- (4.5, 2);
+\node[anchor=south west,inner sep=0] at (4.5, 0) {\includegraphics[height=2cm,width=3cm]{gammatone_Q1.png}};
+\node at (6.5, -0.25) {(b)};
+\end{tikzpicture}
 \caption{
 \label{fig:gammatones}
-Left: Gammatone wavelet $\boldsymbol{\psi_{\gamma_1}}(t)$ with a quality factor of $Q=4$.
-Right: Gammatone wavelet $\boldsymbol{\psi_{\gamma_2}}(t)$ with a quality factor of $Q=1$.
-Blue and red oscillations represent the real and imaginary parts. The orange envelope represents
-the complex modulus.}
+Fourier transforms $\widehat{\psi}(\omega)$ of Gammatone mother wavelets with quality factors (a) $Q = 4$ and (b) $Q = 1$. Blue and red oscillations represent the real and imaginary parts. The orange envelope represents the complex modulus. Note that the Fourier transforms are zero in the negative frequencies.}
 \end{center}
 \end{figure}
 
