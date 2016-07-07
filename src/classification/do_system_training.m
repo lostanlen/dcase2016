@@ -6,7 +6,7 @@ function do_system_training(dataset, model_path, feature_normalizer_path, ...
 % model container format (struct):
 %   model.normalizer = normalizer_class;
 %   model.models = containers.Map();
-%   model.models(scene_label) = model_struct;    
+%   model.models(scene_label) = model_struct;
 %
 % Parameters
 % ----------
@@ -60,7 +60,7 @@ end
 % Check that target path exists, create if not
 check_path(model_path);
 progress(1, 'Collecting data', 0, '');
-parfor fold=dataset.folds(dataset_evaluation_mode)        
+parfor fold=dataset.folds(dataset_evaluation_mode)
     current_model_file = get_model_filename(fold, model_path);
     if or(~exist(current_model_file, 'file'), overwrite)
         % Load normalizer
@@ -76,8 +76,8 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
         % Initialize model container
         model_container = struct('normalizer', normalizer, ...
             'models', containers.Map() );
-        
-        % Collect training examples            
+
+        % Collect training examples
         train_items = dataset.train(fold);
         data = containers.Map();
         for item_id=1:length(train_items)
@@ -94,7 +94,7 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
             else
                 error(['Features not found [', item.file, ']']);
             end
-            
+
             % Transform features
             if strcmp(transformation, 'log')
                 feature_data = log(eps() + feature_data);
@@ -138,8 +138,11 @@ parfor fold=dataset.folds(dataset_evaluation_mode)
 
             all_data = data.values;
             if size(all_data{1}, 3) > 1
-                all_data = cellfun(@(x) reshape(x, size(x, 1), ...
-                    size(x, 2) * size(x, 3)), all_data, 'UniformOutput', false);
+                % Single-azimuth training
+                all_data = cellfun(@(x) x(:, :, 3));
+                % Multi-azimuth training
+                %all_data = cellfun(@(x) reshape(x, size(x, 1), ...
+                %    size(x, 2) * size(x, 3)), all_data, 'UniformOutput', false);
             end
             scene_instance_ct = cellfun(@(x)(size(x, 2)), all_data);
             label_vec = arrayfun(@(k)(k*ones(scene_instance_ct(k), 1)), ...
