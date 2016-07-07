@@ -167,7 +167,7 @@ The scalogram provides a useful representation of the time-frequency content of 
 \end{align}
 In our configuration $\phi_T$ is given by a Gabor filter centered at frequency $0$ with the desired bandwidth $T$ in time. The coefficients $S_1 x$ are known as first-order time scattering coefficients and are comparable to the commonly used mel-frequency spectrogram coefficients \cite{davis-mermelstein}.
 
-The averaging by $\phi_T$ loses fine-scale structre in the scalogram $x_1$. To recover this, we calculate a second wavelet decomposition, this on the scalogram, along the time axis. Instead of the quality factor $Q = 4$ used in the first decomposition, we now use $Q = 1$. As before, we compute the complex modulus and obtain
+The averaging by $\phi_T$ loses fine-scale structure in the scalogram $x_1$. To recover this, we calculate a second wavelet decomposition, this on the scalogram, along the time axis. Instead of the quality factor $Q = 4$ used in the first decomposition, we now use $Q = 1$. As before, we compute the complex modulus and obtain
 \begin{align}
 	\nonumber
 	x_2(t, \log \lau, \log \lad) &= x_1(\cdot, \log \lau) \ast \psi_\lad(t) \\
