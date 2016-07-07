@@ -9,6 +9,7 @@
 \usepackage{dcase2016,amsmath,graphicx,url,times}
 \usepackage{booktabs}
 \usepackage{tikz}
+\usepackage{amssymb}
 \usetikzlibrary{arrows.meta}
 %\usepackage{dcase2016,amssymb,amsmath,graphicx,times,url}
 
@@ -97,11 +98,17 @@ Fourier transforms $\widehat{\psi}(\omega)$ of Gammatone mother wavelets with qu
 \end{center}
 \end{figure}
 
-We define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating a mother wavelet $\psi$ according to
+First, for a signal $x$, let us define its Fourier transform $\widehat{x}$ by
+\begin{equation}
+	\widehat{x}(\omega) = \int_{\mathbb{R}} x(u) e^{-i\omega u}\,du.
+\end{equation}
+Given an analytic filter $\psi$ with Fourier transform $\widehat{\psi}$ concentrated around the dimensionless frequency $1$, we define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating $\psi$, called the mother wavelet, to obtain
 \begin{equation}
 	\psi_\lambda(t) = \lambda \psi(\lambda t).
 \end{equation}
-The mother wavelet $\psi$ is assumed to be analytic, that is with a zero Fourier transform for negative frequencies. In addition, we scale the Fourier transform of $\psi$ to be centered around the dimensionless frequency $1$. Consequently, $\psi_\lambda$ is centered at the frequency $\lambda$. A function $\psi$ that fulfills these criteria is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
+The analyticity of $\psi$ forces its Fourier transform to be zero for negative frequencies. The wavelet filters $\psi_\lambda$ are also analytic and since $\widehat{\psi}$ is centered around frequency $1$, $\widehat{\psi}_\la$ is centered around $\lambda$.
+
+A function $\psi$ that fulfills our conditions is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
 \begin{equation}
 	\psi(t) = ((n-1)t^{n-2}+ i t^{n-1})e^{-(b + i) t}\, 1_{[0,\infty)}(t),
 \end{equation}
@@ -111,7 +118,7 @@ Given a signal $x$, we decompose it using the wavelet filter bank to obtain
 \begin{equation}
 	x \ast \psi_\lau(t) \quad \mathrm{for~}\lau>0,
 \end{equation}
-known as the wavelet decomposition of $x$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
+known as the wavelet decomposition of $x$. We have denoted the standard convolution operator by $\ast$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
 
 The wavelet decomposition itself is very sensitive to time-shifting and time-warping, which can be reduced by taking the complex modulus. The result is known as the wavelet scalogram and we denote it by
 \begin{equation}
