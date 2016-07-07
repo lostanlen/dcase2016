@@ -146,6 +146,22 @@ we can combine all of them into one scattering vector at time $t$
 \end{equation}
 It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T$ in time.
 
+\section{Scattering post-processing}
+
+Instead of feeding the raw scattering vectors into the SVM classifier, we process them to facilitate model building by reducing their dynamic range and standardizing their variability. Specifically, we first compute the log-scattering coefficients by taking the logarithm of each value in the scattering vector to get
+\begin{equation}
+	\log S_1 x(t, \log \lau) = \log \left( | x \ast \psi_\lau | \ast \phi_T(t) \right)
+\end{equation}
+in the first order and
+\begin{equation}
+	\log S_2 x(t, \log \lau, \log \lad) = \log \left( |\,| x \ast \psi_\lau | \ast \psi_\lad | \ast \phi_T(t) \right)
+\end{equation}
+in the second order. These are combined across all log-frequencies $\log \lau$ and $\log \lad$ as before to yield a log-scattering vector $\log Sx(t)$.
+
+The log-scattering coefficients are better suited for audio classification since audio amplitudes can vary across several orders of magnitude without significantly changing the content of the signal. This is often characterized as the Weber-Fechner law in psychoacoustics.
+
+In addition, we diagonally standardize the coefficients to have mean zero and unit variance. To do this for our train-test splits, we calculate the mean and variance for each scattering coefficient across our training data and then use this to standardize both the training and testing data for the current split. This helps improve the conditioning of the SVM training since all values are in the same numerical range.
+
 \section{Data augmentation}
 
 \section{Discussion}
