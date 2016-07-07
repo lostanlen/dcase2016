@@ -147,7 +147,7 @@ we can combine all of them into one scattering vector at time $t$
 \begin{equation}
 	Sx(t) = \{S_1x(t), S_2x(t)\}.
 \end{equation}
-It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T$ in time.
+It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T/2$ in time.
 
 \section{Scattering post-processing}
 \label{sec:post}
