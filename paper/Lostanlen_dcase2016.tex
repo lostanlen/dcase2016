@@ -178,6 +178,16 @@ To reduce this center bias, we augment the training data by including other mixe
 \end{equation}
 where $\alpha$ takes values $-1$, $-1/2$, $0$, $1/2$, $1$. Note that our previous signal $x_M$ corresponds to $\alpha = 0$. This augmented training set thus simulates different localizations of the audio sources, allowing the classifier to learn invariance with respect to this parameter. At testing time, only the center mix ($\alpha = 0$) is used to calculate the scattering vector is fed into the classifier.
 
+\section{Classifier}
+
+Given the recordings in a training set, we compute their scattering vectors as described in Section \ref{sec:scattering}. Each recording being $30~\mathrm{s}$ long and the averaging window set at $T = 740~\mathrm{ms}$, this results in $80$ scattering vectors per recording, since $Sx$ is sampled at intervals of size $T/2 = 370~\mathrm{ms}$. From these, log-scattering vectors $\log Sx$ are computed as outlined in Section \ref{sec:post} and their mean and variance are computed across all recordings in the training set. These values are then used to standardize the log-scattering vectors to have mean zero and unit variance.
+
+These log-scattering vectors are then fed, along with the class label of the recording they are extracted from, into the training algorithm for a linear SVM. An SVM is constructed by finding a hyperplane in feature space that best discriminates between two classes \cite{vapnik}. In our system, we used the LIBLINEAR library \cite{liblinear}. Since the SVM is formulated as a binary classifier, a one-versus-all scheme is used to generalize its results to a multi-class setting.
+
+To train the SVM, a cost parameter $C$ is used to determine the trade-off between penalizing errors on the training data and the maximization of discriminatory margin. In our case, we saw very little difference in performance when varying this parameter, which suggests that there is little conflict between these two objectives and that the data is therefore close to linearly separable. We therefore set $C$ equal to $1$.
+
+Once the SVM is trained, we feed it log-scattering vectors from the testing set. As discussed in Section \ref{sec:post}, these are first standardized by the mean and variance derived from the training set. Again, a $30~\mathrm{s}$-recording in the testing set yields $80$ log-scattering vectors, which means that the SVM returns $80$ different class labels for a single recording. To obtain a label for the entire recording, we perform a majority vote among all the labels corresponding to the individual log-scattering vectors. This type of approach to aggregating representation vectors along a time series is known as a late integration scheme \cite{kittler}.
+
 \section{Discussion}
 
 \begin{table}[!htbp]
