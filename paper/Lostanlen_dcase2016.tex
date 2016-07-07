@@ -144,6 +144,11 @@
 \newcommand*{\eg}{e.g.\@\xspace}
 \newcommand*{\ie}{i.e.\@\xspace}
 \newcommand*{\etal}{et al.\@\xspace}
+
+\newcommand{\la}{{\lambda}}
+\newcommand{\lau}{{\lambda_1}}
+\newcommand{\lad}{{\lambda_2}}
+
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
@@ -302,6 +307,8 @@ At the training stage, a linear support vector machine (SVM) classifier is train
 
 \section{Scattering transform}
 
+The scattering transform was introduced by S. Mallat as a signal representation that is invariant to translations and stable to deformation \cite{stephane}. It has had success in classifying images \cite{joan}, audio \cite{dss}, and biomedical signals \cite{embs}. For audio signals, translation corresponds to time-shifting, while deforming a signal warps it in time. Both of these transformations have little to no effect on the semantic content of an audio signal, so reducing their influence enables us to train more accurate classifiers using limited training data. A brief review of the scattering transform is provided in this section.
+
 \begin{figure}
 \begin{center}
 \setlength{\unitlength}{1cm}
@@ -311,12 +318,72 @@ At the training stage, a linear support vector machine (SVM) classifier is train
 \end{picture}
 \caption{
 \label{fig:gammatones}
-Left: Gammatone wavelet $\boldsymbol{\psi_{\gamma_1}}(t)$ with a quality factor of $Q_1=8$.
-Right: Gammatone wavelet $\boldsymbol{\psi_{\gamma_2}}(t)$ with a quality factor of $Q_2=1$.
+Left: Gammatone wavelet $\boldsymbol{\psi_{\gamma_1}}(t)$ with a quality factor of $Q=4$.
+Right: Gammatone wavelet $\boldsymbol{\psi_{\gamma_2}}(t)$ with a quality factor of $Q=1$.
 Blue and red oscillations represent the real and imaginary parts. The orange envelope represents
 the complex modulus.}
 \end{center}
 \end{figure}
+
+We define a wavelet filter bank $\{\psi_\lambda\}_{\lambda>0}$ by dilating a mother wavelet $\psi$ according to
+\begin{equation}
+	\psi_\lambda(t) = \lambda \psi(\lambda t).
+\end{equation}
+The mother wavelet $\psi$ is assumed to be analytic, that is with a zero Fourier transform for negative frequencies. In addition, we will the Fourier transform of $\psi$ to be centered around $1$. Consequently, $\psi_\lambda$ is centered at the frequency $\lambda$. A function $\psi$ that fulfills these criteria is the analytic gamma wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
+\begin{equation}
+	\psi(t) = ???
+\end{equation}
+We shall have use for wavelets of different quality factors $Q$. To begin with, we shall take $Q = 4$.
+
+Given a signal $x$, we decompose it using the wavelet filter bank to obtain
+\begin{equation}
+	x \ast \psi_\lau(t) \quad \mathrm{for~}\lau>0,
+\end{equation}
+known as the wavelet decomposition of $x$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
+
+The wavelet decomposition itself is very sensitive to time-shifting and time-warping, which can be reduced by taking the complex modulus. The result is known as the wavelet scalogram and we denote it by
+\begin{equation}
+	x_1(t, \log \lau) = | x \ast \psi_\lau(t) |.
+\end{equation}
+A sample scalogram is given in Figure \ref{fig:scalogram}.
+
+The scalogram provides a useful representation of the time-frequency content of a signal. At a given point $(t, \log \lau)$, it gives the intensity of $x$ at time $t$ and log-frequency $\log \lau_1$. However, it does not have the desired invariance and stability properties. To achieve this, we average the scalogram in time using a lowpass filter $\phi_T(t)$ of duration $T$ to give
+\begin{align}
+	\nonumber
+	S_1 x(t, \log \lau) &= x_1(\cdot, \log \lau) \ast \phi_T(t) \\
+	&= | x \ast \psi_\lau | \ast \phi_T(t).
+\end{align}
+In our configuration $\phi_T$ is given by a Gabor filter centered at frequency $0$ with the desired bandwidth $T$ in time. The coefficients $S_1 x$ are known as first-order time scattering coefficients and are comparable to the commonly used mel-frequency spectrogram coefficients \cite{davis-mermelstein}.
+
+The averaging by $\phi_T$ loses fine-scale structre in the scalogram $x_1$. To recover this, we calculate a second wavelet decomposition, this on the scalogram, along the time axis. Instead of the quality factor $Q = 4$ used in the first decomposition, we now use $Q = 1$. As before, we compute the complex modulus and obtain
+\begin{align}
+	\nonumber
+	x_2(t, \log \lau, \log \lad) &= x_1(\cdot, \log \lau) \ast \psi_\lad(t) \\
+	&= |\,| x \ast \psi_\lau | \ast \psi_\lad (t) |.
+\end{align}
+This second-order wavelet scalogram describes the modulation structure of the frequency band centered at $\log \lau$ of the first-order scalogram $x_1$. It is therefore closely related to modulation spectrograms \cite{atlas}, but are defined using wavelet decompositions instead of short-time Fourier transforms.
+
+Again, to obtain invariance, the second-order scalogram $x_2$ is averaged in time using the lowpass filter $\phi_T$ to give
+\begin{align}
+	\nonumber
+	S_2 x(t, \log \lau, \log \lad) &= x_2(\cdot, \log \lau, \log \lad) \\
+	&= |\,| x \ast \psi_\lau | \ast \psi_\lad | \ast \phi_T(t),
+\end{align}
+which are known as second-order time scattering coefficients. Like modulation spectrograms, these coefficients provide information on the modulation structure of the signal $x$ at log-frequency $\log \lau$, but does so in a stable manner due to the wavelet construction. In this way, they are more closely related to constant-Q averaged modulation spectrograms \cite{ellis-mcdermott}. We note that the above procedure can be continued for third- and higher-order scattering coefficients, but that for most applications, first- and second-order coefficients suffice.
+
+Concatenating all the first-order scattering coefficients into one vector
+\begin{equation}
+	S_1x(t) = \{S_1x(t, \log \lau)\}_{\lau>0},
+\end{equation}
+and doing the same for the second-order coefficients
+\begin{equation}
+	S_2x(t) = \{S_2x(t, \log \lau, \log \lad\}_{\lau>0, \lad>0},
+\end{equation}
+we can combine all of them into one scattering vector at time $t$
+\begin{equation}
+	Sx(t) = \{S_1x(t), S_2x(t)\}.
+\end{equation}
+It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T$ in time.
 
 \section{Data augmentation}
 
