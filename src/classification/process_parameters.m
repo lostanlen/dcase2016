@@ -68,8 +68,12 @@ if ~isfield(params.flow, 'feature_transformation')
 end
 
 modeling_params = struct();
-modeling_params.selection = params.selection;
-modeling_params.transform = params.transform;
+if isfield(params, 'selection')
+    modeling_params.selection = params.selection;
+end
+if isfield(params, 'transform')
+    modeling_params.transform = params.transform;
+end
 modeling_params.classifier = params.classifier;
 
 params.features.hash = get_parameter_hash(params.features);
