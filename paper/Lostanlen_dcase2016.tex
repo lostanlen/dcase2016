@@ -148,6 +148,27 @@ It is important here to remark that, although the above formulas cover continuou
 
 \section{Data augmentation}
 
+Most acoustic scene datasets are recorded according to a binaural protocol, i.e. with a pair of in-ear microphones \cite{Wang2006}.
+This protocol provides a realistic description of the spatial auditory environment, as it reproduces the natural listening conditions of humans.
+In particular, the interaural level difference (ILD) between left and right channel conveys the approximate azimuth of each sound source that make up the scene with respect to the listener \cite{Blauert2003}.
+Yet, since the location of the recordist varies across instances of the same class, the feature space for classification should be invariant to these azimuths.
+
+In order to achieve invariance to ILD, averaging the left and right channels into a monophonic signal is by far the most widespread approach.
+However, it favors the center of the scene while attenuating lateral cues.
+Moreover, sources that are on distinct azimuths get mixed, which may cause bias at training time.
+
+Instead, so as to leverage stereophonic data, we perform multiple combinations of the left channel $\boldsymbol{x_{\mathsf{L}}}(t)$ and right channel $\boldsymbol{x_{\mathsf{R}}}(t)$ into monophonic signals $\boldsymbol{x_{\alpha}}(t)$ according to the equation
+\begin{equation}
+\boldsymbol{x_{\alpha}}(t) =
+\dfrac{1+\alpha}{2} \boldsymbol{x_\mathsf{L}}(t) +
+\dfrac{1-\alpha}{2} \boldsymbol{x_\mathsf{R}}(t),
+\end{equation}
+where $\alpha$ is a panoramic mixing weight, taking values between $-1$ and $+1$, which could be deterministic or random.
+
+In following experiments, we deterministically set $\alpha$ to the values $-1$, $\frac{1}{2}$, $0$, $+\frac{1}{2}$, and $+1$.
+This is a form of data augmentation, because $5$ monophonic signals are derived from each binaural recording in the training set.
+At test time, only the center mix ($\alpha = 0$) is used to perform the class.
+
 \section{Discussion}
 
 \begin{table}[!htbp]
