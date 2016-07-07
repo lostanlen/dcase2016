@@ -61,14 +61,14 @@ This technical report describes our contribution to the scene classification tas
 One, two, three, four, five
 \end{keywords}
 
-\section{System outline}
+\section{System Outline}
 \label{sec:outline}
 
 The system used for the scene classification task is illustrated in Figure \ref{fig:outline}. Each recording is decomposed using a time scattering transform, which provides a signal representation that is locally invariant to time-shifting and stable to time-warping deformation. Since small changes in timing have little relevance to the auditory scene of a particular recording, this invariance reduces the variability of the data without necessarily hampering discriminability. The averaging scale of the scattering transform is fixed to be $740~\mathrm{ms}$. In order to account for the varying orders of magnitude across frequencies, we then apply a logarithmic compression to the data. Each recording is thus represented as a sequence of logarithmically compressed scattering vectors.
 
 At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
 
-\section{Scattering transform}
+\section{Scattering Representation}
 \label{sec:scattering}
 
 The scattering transform was introduced by S. Mallat as a signal representation that is invariant to translations and stable to deformation \cite{stephane}. It has had success in classifying images \cite{joan}, audio \cite{dss}, and biomedical signals \cite{embs}. For audio signals, translation corresponds to time-shifting, while deforming a signal warps it in time. Both of these transformations have little to no effect on the semantic content of an audio signal, so reducing their influence enables us to train more accurate classifiers using limited training data. A brief review of the scattering transform is provided in this section.
@@ -149,7 +149,7 @@ we can combine all of them into one scattering vector at time $t$
 \end{equation}
 It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T/2$ in time.
 
-\section{Scattering post-processing}
+\section{Scattering Post-Processing}
 \label{sec:post}
 
 Instead of feeding the raw scattering vectors into the SVM classifier, we process them to facilitate model building by reducing their dynamic range and standardizing their variability. Specifically, we first compute the log-scattering coefficients by taking the logarithm of each value in the scattering vector to get
@@ -166,7 +166,7 @@ The log-scattering coefficients are better suited for audio classification since
 
 In addition, we diagonally standardize the coefficients to have mean zero and unit variance. To do this for our train-test splits, we calculate the mean and variance for each scattering coefficient across our training data and then use this to standardize both the training and testing data for the current split. This helps improve the conditioning of the SVM training since all values are in the same numerical range.
 
-\section{Data augmentation}
+\section{Data Augmentation}
 \label{sec:augment}
 
 The audio recordings provided for the scene classification challenge consist of a left and a right channel. As such, for each localized audio source in a recording, there is some variability depending on its relative location with respect to the microphone. This variability should have no bearing on the classification of the recording, so we would like to ensure invariance with respect to this relative orientation.
