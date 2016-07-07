@@ -169,19 +169,26 @@ In addition, we diagonally standardize the coefficients to have mean zero and un
 \section{Data Augmentation}
 \label{sec:augment}
 
-The audio recordings provided for the scene classification challenge consist of a left and a right channel. As such, for each localized audio source in a recording, there is some variability depending on its relative location with respect to the microphone. This variability should have no bearing on the classification of the recording, so we would like to ensure invariance with respect to this relative orientation.
+Most acoustic scene datasets are recorded according to a binaural protocol, i.e. with a pair of in-ear microphones \cite{Wang2006}.
+This protocol provides a realistic description of the spatial auditory environment, as it reproduces the natural listening conditions of humans.
+In particular, the interaural level difference (ILD) between left and right channel conveys the approximate azimuth of each sound source that make up the scene with respect to the listener \cite{Blauert2003}.
+Yet, since the location of the recordist varies across instances of the same class, the feature space for classification should be invariant to these azimuths.
 
-One approach is to simple average the left and right signals. If these are denoted by $x_L$ and $x_R$, respectively, we would thus have
-\begin{equation}
-	x_M(t) = \frac{1}{2} x_L(t) + \frac{1}{2} x_R(t),
-\end{equation}
-where $x_M$ is the mixed signal. Unfortunately, this emphasizes signals that are evenly mixed between left and right -- that is, signals that are perfectly centered in front of or behind the microphone -- at the expense of signals that are located only on the left and the right. Indeed, if $x_L$ is zero and $x_R$ contains the entire signal, the resulting mixed signal $x_M$ will have a lower amplitude.
+In order to achieve invariance to ILD, averaging the left and right channels into a monophonic signal is by far the most widespread approach.
+However, it favors the center of the scene while attenuating lateral cues.
+Moreover, sources that are on distinct azimuths get mixed, which may cause bias at training time.
 
-To reduce this center bias, we augment the training data by including other mixed signals given by
+Instead, so as to leverage stereophonic data, we perform multiple combinations of the left channel $\boldsymbol{x_{\mathsf{L}}}(t)$ and right channel $\boldsymbol{x_{\mathsf{R}}}(t)$ into monophonic signals $\boldsymbol{x_{\alpha}}(t)$ according to the equation
 \begin{equation}
-	x_\alpha(t) = \frac{1-\alpha}{2} x_L(t) + \frac{1+\alpha}{2} x_R(t),
+\boldsymbol{x_{\alpha}}(t) =
+\dfrac{1+\alpha}{2} \boldsymbol{x_\mathsf{L}}(t) +
+\dfrac{1-\alpha}{2} \boldsymbol{x_\mathsf{R}}(t),
 \end{equation}
-where $\alpha$ takes values $-1$, $-1/2$, $0$, $1/2$, $1$. Note that our previous signal $x_M$ corresponds to $\alpha = 0$. This augmented training set thus simulates different localizations of the audio sources, allowing the classifier to learn invariance with respect to this parameter. At testing time, only the center mix ($\alpha = 0$) is used to calculate the scattering vector is fed into the classifier.
+where $\alpha$ is a panoramic mixing weight, taking values between $-1$ and $+1$, which could be deterministic or random.
+
+In following experiments, we deterministically set $\alpha$ to the values $-1$, $\frac{1}{2}$, $0$, $+\frac{1}{2}$, and $+1$.
+This is a form of data augmentation, because $5$ monophonic signals are derived from each binaural recording in the training set.
+At test time, only the center mix ($\alpha = 0$) is used to perform the class.
 
 \section{Classifier}
 \label{sec:classifier}
