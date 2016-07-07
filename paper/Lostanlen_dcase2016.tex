@@ -66,10 +66,44 @@ One, two, three, four, five
 
 \section{System Outline}
 \label{sec:outline}
-
 The system used for the scene classification task is illustrated in Figure \ref{fig:outline}. Each recording is decomposed using a time scattering transform, which provides a signal representation that is locally invariant to time-shifting and stable to time-warping deformation. Since small changes in timing have little relevance to the auditory scene of a particular recording, this invariance reduces the variability of the data without necessarily hampering discriminability. The averaging scale of the scattering transform is fixed to be $740~\mathrm{ms}$. In order to account for the varying orders of magnitude across frequencies, we then apply a logarithmic compression to the data. Each recording is thus represented as a sequence of logarithmically compressed scattering vectors.
 
-At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
+Due to the stereophonic nature of the recordings, we augment the training data by constructing monophonic signals with different mixing proportions, effectively providing invariance to sound direction. At the training stage, a linear support vector machine (SVM) classifier is trained using the sequences obtained from the training data. For each recording in the testing set, the classifier is applied to all scattering vectors in the recording, yielding a class for each vector. The class of the entire recording is then determined by majority vote. Evaluating this system on the standard four train-test splits in the development data, we obtain an average accuracy of ???.
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\node (train heading) at (2, 6) {\textbf{Training Phase}};
+\draw (0.25, 5.75) -- (3.75, 5.75);
+\node (train data) at (2, 5.25) {Recording};
+\node[draw,rectangle] (train augment) at (2, 4.50) {Data Augmentation};
+\node[draw,rectangle] (train scatt) at (2, 3.75) {Log-Scattering};
+\node[draw,rectangle] (train svm) at (2, 3) {Train SVM};
+\draw[-{Latex}] (train data) -- (train augment);
+\draw[-{Latex}] (train augment) -- (train scatt);
+\draw[-{Latex}] (train scatt) -- (train svm);
+
+\node (test heading) at (6, 6) {\textbf{Testing Phase}};
+\draw (4.25, 5.75) -- (7.75, 5.75);
+\node (test data) at (6, 5.25) {Recording};
+\node[draw,rectangle] (test scatt) at (6, 3.75) {Log-Scattering};
+\node[draw,rectangle] (test svm) at (6, 3) {Test SVM};
+\node[draw,rectangle] (test vote) at (6, 2.25) {Voting};
+\node (test label) at (6, 1.5) {Label};
+\draw[-{Latex}] (test data) -- (test scatt);
+\draw[-{Latex}] (test scatt) -- (test svm);
+\draw[-{Latex}] (test svm) -- (test vote);
+\draw[-{Latex}] (test vote) -- (test label);
+
+\draw[dashed,-{Latex}] (train svm) -- (test svm);
+\end{tikzpicture}
+\end{center}
+\caption{
+\label{fig:outline}
+The scattering classification system proposed for the scene classification challenge. During the training phase, the data is augmented by mixing the left and right channels at various proportions. The log-scattering vectors are then computed and used to train a linear SVM. This SVM is then used to classify the sequence of log-scattering vectors for each test recording. The resulting sequence of labels is reduced to a single recording label through majority vote.
+}
+\end{figure}
+
 
 \section{Scattering Representation}
 \label{sec:scattering}
