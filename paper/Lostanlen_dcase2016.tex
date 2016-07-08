@@ -173,7 +173,7 @@ The averaging by $\phi_T$ discards fine-scale temporal structure in the scalogra
 	x_2(t, \log \lau, \log \lad) &= x_1(\cdot, \log \lau) \ast \psi_\lad(t) \\
 	&= |\,| x \ast \psi_\lau | \ast \psi_\lad (t) |.
 \end{align}
-This second-order wavelet scalogram describes the modulation structure of the frequency band centered at $\log \lau$ of the first-order scalogram $x_1$. It is therefore closely related to modulation spectrograms \cite{atlas}, but are defined using wavelet decompositions instead of short-time Fourier transforms.
+This second-order wavelet scalogram describes the modulation structure of the frequency band centered at $\log \lau$ of the first-order scalogram $x_1$. It is therefore closely related to modulation spectrograms \cite{atlas,hermansky}, but are defined using wavelet decompositions instead of short-time Fourier transforms.
 
 Again, to obtain invariance, the second-order scalogram $x_2$ is averaged in time using the lowpass filter $\phi_T$ to give
 \begin{align}
@@ -181,7 +181,7 @@ Again, to obtain invariance, the second-order scalogram $x_2$ is averaged in tim
 	S_2 x(t, \log \lau, \log \lad) &= x_2(\cdot, \log \lau, \log \lad) \ast \phi_T(t) \\
 	&= |\,| x \ast \psi_\lau | \ast \psi_\lad | \ast \phi_T(t),
 \end{align}
-which are known as second-order time scattering coefficients. Like modulation spectrograms, these coefficients provide information on the modulation structure of the signal $x$ at log-frequency $\log \lau$, but do so in a stable manner due to the wavelet construction. In this way, they are more closely related to constant-Q averaged modulation spectrograms \cite{ellis-mcdermott}. We note that the above procedure can be continued for third- and higher-order scattering coefficients, but that for most applications, first- and second-order coefficients suffice.
+which are known as second-order time scattering coefficients. Like modulation spectrograms, these coefficients provide information on the modulation structure of the signal $x$ at log-frequency $\log \lau$, but do so in a stable manner due to the wavelet construction. In this way, they are more closely related to constant-Q averaged modulation spectrograms \cite{ellis-mcdermott,thompson2003non}. We note that the above procedure can be continued for third- and higher-order scattering coefficients, but that for most applications, first- and second-order coefficients suffice.
 
 Concatenating all the first-order scattering coefficients into one vector
 \begin{equation}
