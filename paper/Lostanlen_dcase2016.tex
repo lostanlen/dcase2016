@@ -144,7 +144,7 @@ The analyticity of $\psi$ forces its Fourier transform to be zero for negative f
 
 A function $\psi$ that fulfills our conditions is the pseudo-analytic Gammatone wavelet, illustrated in Figure \ref{fig:gammatones}. Its form is given explicitly by
 \begin{equation}
-	\psi(t) = ((n-1)t^{n-2}+ i t^{n-1})e^{-(b + i) t}\, 1_{[0,\infty)}(t),
+	\psi(t) = \left((n-1)t^{n-2}+ i t^{n-1}\right)e^{-(b + i) t}\, 1_{[0,\infty)}(t),
 \end{equation}
 where the bandwidth parameter $b$ is roughly proportional to $2^{-1/Q}$ and $Q$ is the desired quality factor, i.e. the ratio of the center frequency to the half-maximum bandwidth in the Fourier domain. To begin with, we shall take $Q = 4$.
 
@@ -154,7 +154,7 @@ Given a signal $x$, we decompose it using the wavelet filter bank to obtain
 \end{equation}
 known as the wavelet decomposition of $x$. We have denoted the standard convolution operator by $\ast$. The dilation structure of the wavelet filter bank means that we do not need to sample $\lau$ continuously. Rather, it is sufficient to sample $\lau$ as $2^{j/Q}$, where $Q$ is the quality factor of the mother wavelet $\psi$. This means that we sample uniformly in log-frequency $\log \lau$.
 
-The wavelet decomposition itself is very sensitive to time-shifting and time-warping, which can be reduced by taking the complex modulus. The result is known as the wavelet scalogram and we denote it by
+The wavelet decomposition itself is very sensitive to time-shifting and time-warping, which can be partially mitigated by taking the complex modulus. The result is known as the wavelet scalogram and we denote it by
 \begin{equation}
 	x_1(t, \log \lau) = | x \ast \psi_\lau(t) |.
 \end{equation}
@@ -167,7 +167,7 @@ The scalogram provides a useful representation of the time-frequency content of 
 \end{align}
 In our configuration $\phi_T$ is given by a Gabor filter centered at frequency $0$ with the desired bandwidth $T$ in time. The coefficients $S_1 x$ are known as first-order time scattering coefficients and are comparable to the commonly used mel-frequency spectrogram coefficients \cite{davis-mermelstein}.
 
-The averaging by $\phi_T$ loses fine-scale structure in the scalogram $x_1$. To recover this, we calculate a second wavelet decomposition, this on the scalogram, along the time axis. Instead of the quality factor $Q = 4$ used in the first decomposition, we now use $Q = 1$. As before, we compute the complex modulus and obtain
+The averaging by $\phi_T$ discards fine-scale temporal structure in the scalogram $x_1$. To recover this, we calculate a second wavelet decomposition on the scalogram along the time axis. Instead of the quality factor $Q = 4$ used in the first decomposition, we now use $Q = 1$. As before, we compute the complex modulus and obtain
 \begin{align}
 	\nonumber
 	x_2(t, \log \lau, \log \lad) &= x_1(\cdot, \log \lau) \ast \psi_\lad(t) \\
@@ -178,10 +178,10 @@ This second-order wavelet scalogram describes the modulation structure of the fr
 Again, to obtain invariance, the second-order scalogram $x_2$ is averaged in time using the lowpass filter $\phi_T$ to give
 \begin{align}
 	\nonumber
-	S_2 x(t, \log \lau, \log \lad) &= x_2(\cdot, \log \lau, \log \lad) \\
+	S_2 x(t, \log \lau, \log \lad) &= x_2(\cdot, \log \lau, \log \lad) \ast \phi_T(t) \\
 	&= |\,| x \ast \psi_\lau | \ast \psi_\lad | \ast \phi_T(t),
 \end{align}
-which are known as second-order time scattering coefficients. Like modulation spectrograms, these coefficients provide information on the modulation structure of the signal $x$ at log-frequency $\log \lau$, but does so in a stable manner due to the wavelet construction. In this way, they are more closely related to constant-Q averaged modulation spectrograms \cite{ellis-mcdermott}. We note that the above procedure can be continued for third- and higher-order scattering coefficients, but that for most applications, first- and second-order coefficients suffice.
+which are known as second-order time scattering coefficients. Like modulation spectrograms, these coefficients provide information on the modulation structure of the signal $x$ at log-frequency $\log \lau$, but do so in a stable manner due to the wavelet construction. In this way, they are more closely related to constant-Q averaged modulation spectrograms \cite{ellis-mcdermott}. We note that the above procedure can be continued for third- and higher-order scattering coefficients, but that for most applications, first- and second-order coefficients suffice.
 
 Concatenating all the first-order scattering coefficients into one vector
 \begin{equation}
@@ -195,6 +195,7 @@ we can combine all of them into one scattering vector at time $t$
 \begin{equation}
 	Sx(t) = \{S_1x(t), S_2x(t)\}.
 \end{equation}
+
 It is important here to remark that, although the above formulas cover continuous domains in $t$, $\log \lau$, and $\log \lad$, these variables can all be sampled discretely without great loss of information. As mentioned earlier, $\log \lau$ and $\log \lad$ can be sampled uniformly with a step proportional to $1/Q$. In addition, the lowpass nature of the scalogram $x_1$ in time ensures that many coefficients in $x_2$ will be negligible for large values of $\log \lad$. As a result, these can be safely excluded from the transform. Finally, the lowpass filtering by $\phi_T$ ensures that we can sample the final scattering vector $Sx$ along multiples of $T/4$ in time.
 
 \section{Scattering Post-Processing}
@@ -240,25 +241,27 @@ In following experiments, we set $\alpha$ to $-1$, $\frac{1}{2}$, $0$, $+\frac{1
 
 Given the recordings in a training set, we compute their scattering vectors as described in Section \ref{sec:scattering}. Each recording being $30~\mathrm{s}$ long and the averaging window set at $T = 740~\mathrm{ms}$, this results in $160$ scattering vectors per recording, since $Sx$ is sampled at intervals of size $T/4 = 186~\mathrm{ms}$. From these, log-scattering vectors $\log Sx$ are computed as outlined in Section \ref{sec:post} and their mean and variance are computed across all recordings in the training set. These values are then used to standardize the log-scattering vectors to have mean zero and unit variance.
 
-These log-scattering vectors are then fed, along with the class label of the recording they are extracted from, into the training algorithm for a linear SVM. An SVM is constructed by finding a hyperplane in feature space that best discriminates between two classes \cite{vapnik}. In our system, we used the LIBLINEAR library \cite{liblinear}. Since the SVM is formulated as a binary classifier, a one-versus-all scheme is used to generalize its results to a multi-class setting.
+These log-scattering vectors are then fed, along with the class label of the recording they are extracted from, into the training algorithm for a linear SVM. An SVM is a binary linear classifier which is trained by finding the hyperplane that best separates two classes while minimizing training error \cite{vapnik}. In our system, we used the LIBLINEAR library \cite{liblinear}. Since the SVM is formulated as a binary classifier, a one-versus-all scheme is used to generalize its results to a multi-class setting.
 
-To train the SVM, a cost parameter $C$ is used to determine the trade-off between penalizing errors on the training data and the maximization of discriminatory margin. In our case, we saw very little difference in performance when varying this parameter, which suggests that there is little conflict between these two objectives and that the data is therefore close to linearly separable. We therefore set $C$ equal to $1$.
+To train the SVM, a cost parameter $C$ is used to determine the trade-off between penalizing errors on the training data and the maximization of discriminatory margin. In our case, we saw very little difference in performance when varying this parameter, which suggests that there is little conflict between these two objectives and that the data is therefore close to linearly separable. As a result, we set $C$ equal to $1$.
 
 Once the SVM is trained, we feed it log-scattering vectors from the testing set. As discussed in Section \ref{sec:post}, these are first standardized by the mean and variance derived from the training set. Again, a $30~\mathrm{s}$-recording in the testing set yields $160$ log-scattering vectors, which means that the SVM returns $160$ different class labels for a single recording. To obtain a label for the entire recording, we perform a majority vote among all the labels corresponding to the individual log-scattering vectors. This type of approach to aggregating representation vectors along a time series is known as a late integration scheme \cite{kittler}.
 
 \section{Numerical Results}
 \label{sec:results}
 
-To evaluate the time scattering system proposed above, we apply it to the development data provided with the DCASE 2016 scene classification challenge. This dataset is divided into four folds, which can be used to form train-test splits by training on three folds and testing on the remaining fold. This cross-validation procedure provides an estimate of the mean classification accuracy along with its variability due to differing training sets.
-
-The results for the entire system is provided in Table \ref{table:development-results}. It is to be noted that while performance is quite good for most classes, certain classes (``cafe/restaurant'', ``residential\_area'', and ``train'') perform very poorly. These scenes are relatively quiet, with few characteristic sounds present, which could explain the difficulty in classifying them well. The exact cause for this difference in performance merits further study. Despite these problems, the system provides a significant improvement over the baseline system, which consists of mel-frequency cepstral coefficients (MFCCs) modeled using Gaussian mixture models (GMMs) \cite{heittola}. Since the scattering representation takes into account the modulation structure of the scalogram in addition to the average spectral envelope captured by MFCCs, this improvement in performance is to be expected. We expect that further increases in performance can be achieved for this task by introducing more sophisticated extensions of the scattering transform such as the joint time-frequency scattering transform \cite{joint}.
-
-\begin{table}[!htbp]
+\begin{table}[t]
 \begin{center}
 \input{table.tex}
 \end{center}
 \caption{\label{table:development-results} Classification results obtained through cross-validation on the development data for the DCASE 2016 scene classification challenge. The mean and standard deviation of the percentage correct in each class is provided along with the average across classes.}
 \end{table}
+
+To evaluate the time scattering system proposed above, we apply it to the development data provided with the DCASE 2016 scene classification challenge. This dataset is divided into four folds, which can be used to form train-test splits by training on three folds and testing on the remaining fold. This cross-validation procedure provides an estimate of the mean classification accuracy along with its variability due to differing training sets.
+
+The results for the entire system is provided in Table \ref{table:development-results}. It is to be noted that while performance is quite good for most classes, certain classes (``cafe/restaurant'', ``residential\_area'', and ``train'') perform very poorly. These scenes are relatively quiet, with few characteristic sounds present, which could explain the difficulty in classifying them well. The exact cause for this difference in performance merits further study.
+
+Despite these problems, the system provides a significant improvement over the baseline system, which consists of mel-frequency cepstral coefficients (MFCCs) modeled using Gaussian mixture models (GMMs) \cite{heittola}. Since the scattering representation takes into account the modulation structure of the scalogram in addition to the average spectral envelope captured by MFCCs, this improvement in performance is to be expected. We expect that further increases in performance can be achieved for this task by introducing more sophisticated extensions of the scattering transform such as the joint time-frequency scattering transform \cite{joint}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{Lostanlen_dcase2016}
