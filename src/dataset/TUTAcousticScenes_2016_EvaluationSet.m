@@ -110,6 +110,7 @@ classdef TUTAcousticScenes_2016_EvaluationSet < DatasetBase
                     end
                 else                    
                     files = obj.audio_files();
+                    files = unique(files);
                     data = [];
                     for file_id=1:length(files)  
                         current_item = obj.absolute_to_relative(files(file_id));
