@@ -37,7 +37,6 @@ progress(1,'Extracting',(0 / length(files)), '');
 binaural_augmentation = default(feature_params, 'binaural_augmentation', false);
 
 parfor file_id = 1:length(files)
-    disp(file_id);
     audio_filename = files{file_id};
     [raw_path, raw_filename, ext] = fileparts(audio_filename);
     current_feature_file = get_feature_filename(audio_filename, feature_path);
